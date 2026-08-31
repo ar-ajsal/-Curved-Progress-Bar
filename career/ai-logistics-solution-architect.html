@@ -243,9 +243,22 @@
     
     <!-- End of headEnd -->
 
+
+<style id="knc-framer-overrides">
+    /* Hide the 'Made in Framer' badge */
+    a[href^="https://framer.com/"],
+    #__framer-badge-container,
+    #__framer-badge {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        visibility: hidden !important;
+    }
+</style>
 <script id="knc-mutation-observer">
 (function() {
     const replaceNode = (node) => {
+        if (!node) return;
         if (node.nodeType === Node.TEXT_NODE && node.nodeValue) {
             let val = node.nodeValue;
             if (val.toLowerCase().includes('himon')) {
@@ -287,16 +300,23 @@
         }
     };
 
+    const processNodesSafe = (startNode) => {
+        const nodes = [startNode];
+        if (startNode.nodeType === Node.ELEMENT_NODE) {
+            const walk = document.createTreeWalker(startNode, NodeFilter.SHOW_ALL, null, false);
+            let n;
+            while(n = walk.nextNode()) {
+                nodes.push(n);
+            }
+        }
+        nodes.forEach(replaceNode);
+    };
+
     const observer = new MutationObserver((mutations) => {
         for (let mutation of mutations) {
             if (mutation.type === 'childList') {
                 mutation.addedNodes.forEach(node => {
-                    replaceNode(node);
-                    if (node.nodeType === Node.ELEMENT_NODE) {
-                        const walk = document.createTreeWalker(node, NodeFilter.SHOW_ALL, null, false);
-                        let n;
-                        while(n = walk.nextNode()) replaceNode(n);
-                    }
+                    processNodesSafe(node);
                 });
             } else if (mutation.type === 'characterData') {
                 replaceNode(mutation.target);
@@ -306,9 +326,7 @@
 
     const init = () => {
         if (document.body) {
-            const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_ALL, null, false);
-            let n;
-            while(n = walk.nextNode()) replaceNode(n);
+            processNodesSafe(document.body);
             observer.observe(document.body, { childList: true, subtree: true, characterData: true });
         } else {
             requestAnimationFrame(init);
