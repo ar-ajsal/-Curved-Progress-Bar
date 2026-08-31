@@ -285,7 +285,8 @@
         { match: 'unifies human expertise, AI-powered systems', replace: 'KNC Logistics Services unifies human expertise, technology-driven systems, and a capable fleet to help businesses simplify complex supply chain operations and deliver with confidence.' },
         { match: 'integrates our expert teams, cutting-edge technology', replace: 'KNC Logistics Services integrates expert teams, reliable technology, and a strong vendor network to help businesses navigate complex supply chains and achieve on-time delivery.' },
         { match: 'powerful data platforms, and a resilient fleet', replace: 'KNC Logistics Services combines dedicated personnel, proven logistics platforms, and a resilient network to empower businesses with end-to-end visibility and control across the supply chain.' },
-        { match: 'where technology meets operational', replace: 'Join a growing team where professionalism meets innovation. Build impactful solutions and grow alongside the leaders of integrated logistics in Saudi Arabia.' }
+        { match: 'where technology meets operational', replace: 'Join a growing team where professionalism meets innovation. Build impactful solutions and grow alongside the leaders of integrated logistics in Saudi Arabia.' },
+        { match: 'Himon redefines the logistics journey', replace: 'KNC Logistics Services redefines the logistics journey with a smarter, faster, and reliable approach to moving goods. Combine modern trucking with optimized routing to ensure real-time visibility.' }
     ];
 
     const replaceNode = (node) => {
@@ -294,7 +295,6 @@
             let val = node.nodeValue;
             let origVal = val;
             
-            // Check paragraph replacements first
             for (let i = 0; i < paragraphReplacements.length; i++) {
                 if (val.includes(paragraphReplacements[i].match)) {
                     val = paragraphReplacements[i].replace;
@@ -340,8 +340,6 @@
                 if (node.parentNode && !node.parentNode.querySelector('.knc-logo-text')) {
                     const textLogo = document.createElement('div');
                     textLogo.className = 'knc-logo-text';
-                    // Framer navbars often swap to dark text on light backgrounds. We force it to a visible grey/black if it's supposed to be light, 
-                    // but the user's screenshot has a dark background for the navbar. We'll use a bold white color.
                     textLogo.style.cssText = "font-weight: 900; font-size: 26px; font-family: 'Syne', sans-serif; color: #ffffff; display: flex; align-items: center; letter-spacing: 1px; white-space: nowrap; position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 10;";
                     textLogo.textContent = "KNC";
                     node.parentNode.appendChild(textLogo);
@@ -386,6 +384,50 @@
         }
     };
     init();
+
+    // Aggressive catch-all for split-text animations or missed paragraphs
+    setInterval(() => {
+        const elements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, div[data-framer-component-type="RichTextContainer"]');
+        for (let el of elements) {
+            let tc = el.textContent || '';
+            if (!tc.includes('Himon') && !tc.includes('himon')) continue;
+            
+            // Find the deepest element containing the text to minimize collateral damage
+            let current = el;
+            let foundDeeper = true;
+            while (foundDeeper) {
+                foundDeeper = false;
+                for (let i = 0; i < current.children.length; i++) {
+                    let childTc = current.children[i].textContent || '';
+                    if (childTc.includes('Himon') || childTc.includes('himon')) {
+                        current = current.children[i];
+                        foundDeeper = true;
+                        break;
+                    }
+                }
+            }
+
+            // Replace exact paragraph matches first
+            let replaced = false;
+            for (let i = 0; i < paragraphReplacements.length; i++) {
+                if (current.textContent.includes(paragraphReplacements[i].match)) {
+                    current.textContent = paragraphReplacements[i].replace;
+                    replaced = true;
+                    break;
+                }
+            }
+
+            // If no exact paragraph matched, do a global Himon -> KNC replacement on this text node
+            if (!replaced && (current.textContent.includes('Himon') || current.textContent.includes('himon'))) {
+                let newText = current.textContent.replace(/hello@himon\.com/gi, 'hello@knclogistics.com')
+                         .replace(/support@himon\.com/gi, 'info@knclogistics.com')
+                         .replace(/Himon Logistics/gi, 'KNC Logistics Services')
+                         .replace(/Himon/gi, 'KNC');
+                current.textContent = newText;
+            }
+        }
+    }, 1000);
+
 })();
 </script>
 </head>
