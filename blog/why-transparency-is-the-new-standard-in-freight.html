@@ -244,6 +244,8 @@
     <!-- End of headEnd -->
 
 
+
+
 <style id="knc-framer-overrides">
     /* Hide the 'Made in Framer' badge */
     a[href^="https://framer.com/"],
@@ -261,18 +263,26 @@
         if (!node) return;
         if (node.nodeType === Node.TEXT_NODE && node.nodeValue) {
             let val = node.nodeValue;
+            let origVal = val;
+            
             if (val.toLowerCase().includes('himon')) {
-                val = val.replace(/Himon Logistics/gi, 'KNC Logistics Services')
-                         .replace(/Himon/gi, 'KNC')
-                         .replace(/hello@himon\.com/gi, 'hello@knclogistics.com')
-                         .replace(/support@himon\.com/gi, 'info@knclogistics.com');
-                if (val !== node.nodeValue) {
-                    node.nodeValue = val;
-                }
+                val = val.replace(/hello@himon\.com/gi, 'hello@knclogistics.com')
+                         .replace(/support@himon\.com/gi, 'info@knclogistics.com')
+                         .replace(/Himon Logistics/gi, 'KNC Logistics Services')
+                         .replace(/Himon/gi, 'KNC');
             }
             
-            // Hide "200+" and Partners text
-            let vTrim = val.trim();
+            if (val.includes('53589') || val.includes('180 Avenue') || val.includes('MADE BY') || val.includes('SANG DO')) {
+                val = val.replace(/\+4 53589 432285/g, '0502746895')
+                         .replace(/180 Avenue des Pins.*?Switzerland/g, 'Riyadh, Kingdom of Saudi Arabia')
+                         .replace(/MADE BY SANG DO/gi, 'KNC Logistics');
+            }
+            
+            if (val !== origVal) {
+                node.nodeValue = val;
+            }
+            
+            let vTrim = node.nodeValue.trim();
             if (vTrim === '200+' || vTrim.includes('Partners and logistics collaborators')) {
                 let el = node.parentElement;
                 if (el) {
@@ -325,9 +335,9 @@
     });
 
     const init = () => {
-        if (document.body) {
-            processNodesSafe(document.body);
-            observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+        if (document.documentElement) {
+            processNodesSafe(document.documentElement);
+            observer.observe(document.documentElement, { childList: true, subtree: true, characterData: true });
         } else {
             requestAnimationFrame(init);
         }
