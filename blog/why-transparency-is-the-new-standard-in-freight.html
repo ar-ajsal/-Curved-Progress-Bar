@@ -257,12 +257,32 @@
                     node.nodeValue = val;
                 }
             }
+            
+            // Hide "200+" and Partners text
+            let vTrim = val.trim();
+            if (vTrim === '200+' || vTrim.includes('Partners and logistics collaborators')) {
+                let el = node.parentElement;
+                if (el) {
+                    let container = el.closest('[data-framer-component-type="RichTextContainer"], h2');
+                    if (!container) container = el;
+                    container.style.setProperty('display', 'none', 'important');
+                    if (container.parentElement) {
+                        let pClass = (container.parentElement.className || '').toString();
+                        if (pClass.includes('framer-vqnuly') || container.parentElement.children.length <= 2) {
+                            container.parentElement.style.setProperty('display', 'none', 'important');
+                        }
+                    }
+                }
+            }
         } else if (node.nodeType === Node.ELEMENT_NODE) {
             if (node.tagName === 'IMG' && node.src && node.src.includes('SFOTyC7WyuhrZkNJJOwgPI5SRQ.svg')) {
                 const textLogo = document.createElement('div');
                 textLogo.style.cssText = "font-weight: 900; font-size: 26px; font-family: 'Syne', sans-serif; color: inherit; display: flex; align-items: center; letter-spacing: 1px; white-space: nowrap;";
                 textLogo.textContent = "KNC";
                 try { node.parentNode.replaceChild(textLogo, node); } catch(e) {}
+            }
+            if (node.getAttribute && node.getAttribute('data-framer-name') === 'Logo container') {
+                node.style.setProperty('display', 'none', 'important');
             }
         }
     };
