@@ -579,10 +579,20 @@
                 let size = window.getComputedStyle(current).fontSize || '0px';
                 if (parseInt(size) > 80) {
                     current.style.removeProperty('display');
+                    current.style.setProperty('text-align', 'center', 'important');
+                    current.style.setProperty('width', '100%', 'important');
                     if (current.parentElement) {
                         current.parentElement.style.removeProperty('display');
                         current.parentElement.style.setProperty('transform', 'translateY(-40px)', 'important');
                         current.parentElement.style.setProperty('margin-bottom', '-40px', 'important');
+                        current.parentElement.style.setProperty('width', '100%', 'important');
+                        current.parentElement.style.setProperty('display', 'flex', 'important');
+                        current.parentElement.style.setProperty('justify-content', 'center', 'important');
+                    }
+                    if (current.parentElement && current.parentElement.parentElement) {
+                        current.parentElement.parentElement.style.setProperty('width', '100%', 'important');
+                        current.parentElement.parentElement.style.setProperty('display', 'flex', 'important');
+                        current.parentElement.parentElement.style.setProperty('justify-content', 'center', 'important');
                     }
                 }
             }
