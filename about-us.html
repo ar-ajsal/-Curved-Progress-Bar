@@ -455,7 +455,18 @@
         const elements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, div[data-framer-component-type="RichTextContainer"]');
         for (let el of elements) {
             let tc = el.textContent || '';
-            if (!tc.toLowerCase().includes('himon') && tc.trim() !== 'KNC' && tc.trim() !== 'KNC Logistics Services') continue;
+                        let isTestimonial = tc.toLowerCase().includes('marcus sterling') || tc.toLowerCase().includes('techlogistics');
+            if (!isTestimonial && !tc.toLowerCase().includes('himon') && tc.trim() !== 'KNC' && tc.trim() !== 'KNC Logistics Services') continue;
+            
+            if (isTestimonial) {
+                let sec = el.closest('section');
+                if (sec) sec.style.setProperty('display', 'none', 'important');
+                else {
+                    el.style.setProperty('display', 'none', 'important');
+                    if (el.parentElement) el.parentElement.style.setProperty('display', 'none', 'important');
+                }
+                continue;
+            }
             
             // Find the deepest element containing the text to minimize collateral damage
             let current = el;
