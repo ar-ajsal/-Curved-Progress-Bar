@@ -455,7 +455,7 @@
         const elements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, div[data-framer-component-type="RichTextContainer"]');
         for (let el of elements) {
             let tc = el.textContent || '';
-            if (!tc.toLowerCase().includes('himon')) continue;
+            if (!tc.toLowerCase().includes('himon') && tc.trim() !== 'KNC' && tc.trim() !== 'KNC Logistics Services') continue;
             
             // Find the deepest element containing the text to minimize collateral damage
             let current = el;
@@ -464,7 +464,7 @@
                 foundDeeper = false;
                 for (let i = 0; i < current.children.length; i++) {
                     let childTc = current.children[i].textContent || '';
-                    if (childTc.toLowerCase().includes('himon')) {
+                    if (childTc.toLowerCase().includes('himon') || childTc.trim() === 'KNC' || childTc.trim() === 'KNC Logistics Services') {
                         current = current.children[i];
                         foundDeeper = true;
                         break;
@@ -483,6 +483,15 @@
             }
 
             // If no exact paragraph matched, do a global Himon -> KNC replacement on this text node
+                        // Hide the massive KNC footer text
+            if (current.textContent.trim() === 'KNC' || current.textContent.trim() === 'HIMON') {
+                let size = window.getComputedStyle(current).fontSize || '0px';
+                if (parseInt(size) > 80) {
+                    current.style.setProperty('display', 'none', 'important');
+                    if (current.parentElement) current.parentElement.style.setProperty('display', 'none', 'important');
+                }
+            }
+            
             if (!replaced && current.textContent.toLowerCase().includes('himon')) {
                 let newText = current.textContent.replace(/hello@himon\.com/gi, 'hello@masteryandprecise.com')
                          .replace(/support@himon\.com/gi, 'info@knclogistics.com')
