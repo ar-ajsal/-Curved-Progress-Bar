@@ -382,7 +382,7 @@
                 }
             }
         } else if (node.nodeType === Node.ELEMENT_NODE) {
-            if (node.tagName === 'IMG' && node.src && node.src.match(/(lXEyuznaEtGe3kwsGWNjeNXc|f4jdeAbj9Qiq5oIE8EaF2GQbqo8|SFOTyC7WyuhrZkNJJOwgPI5SRQ|BSXabipJ2B71EtZ5FqOZVFCNyfQ|YgTvwh9c5bPxebrakuNuIOPLx4|ZHbOOgur2kltRCUfXipbNPCnFmU|b0DNVJB7mQzGFzKfNW9CHEdlVyc|KZi0MqgpKiFt1UzKRqzt2MxEHc|pqrsgadgEJ2rSscKCprFyweII|wg8XiCnE6Zqup822xnUifsc0hLM|DAmlClGfu5fSTO6VeTMTUH0yAss|sUwxcaOm3K8U7YoNh8KyFbU3w)\.svg/i)) {
+            if (node.tagName === 'IMG' && ((node.src && node.src.match(/(lXEyuznaEtGe3kwsGWNjeNXc|f4jdeAbj9Qiq5oIE8EaF2GQbqo8|SFOTyC7WyuhrZkNJJOwgPI5SRQ|BSXabipJ2B71EtZ5FqOZVFCNyfQ|YgTvwh9c5bPxebrakuNuIOPLx4|ZHbOOgur2kltRCUfXipbNPCnFmU|b0DNVJB7mQzGFzKfNW9CHEdlVyc|KZi0MqgpKiFt1UzKRqzt2MxEHc|pqrsgadgEJ2rSscKCprFyweII|wg8XiCnE6Zqup822xnUifsc0hLM|DAmlClGfu5fSTO6VeTMTUH0yAss|sUwxcaOm3K8U7YoNh8KyFbU3w|RR6P8RcE62xKss1cizOxJyJgoU)\.svg/i)) || (node.alt && node.alt.toLowerCase().includes('himon')))) {
                 node.style.setProperty('opacity', '0', 'important');
                 if (node.parentNode && !node.parentNode.querySelector('.knc-logo-img')) {
                     const imgLogo = document.createElement('img');
