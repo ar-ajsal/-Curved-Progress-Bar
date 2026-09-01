@@ -299,7 +299,7 @@
         visibility: hidden !important;
     }
 
-    /* Hide the massive Himon logo in the hero sections */
+    /* Hide the massive KNC logo in the hero sections */
     [data-framer-name="Replace logo here"] {
         display: none !important;
         visibility: hidden !important;
@@ -342,7 +342,7 @@
         { match: 'integrates our expert teams, cutting-edge technology', replace: 'KNC Logistics Services integrates expert teams, reliable technology, and a strong vendor network to help businesses navigate complex supply chains and achieve on-time delivery.' },
         { match: 'powerful data platforms, and a resilient fleet', replace: 'KNC Logistics Services combines dedicated personnel, proven logistics platforms, and a resilient network to empower businesses with end-to-end visibility and control across the supply chain.' },
         { match: 'where technology meets operational', replace: 'Join a growing team where professionalism meets innovation. Build impactful solutions and grow alongside the leaders of integrated logistics in Saudi Arabia.' },
-        { match: 'Himon redefines the logistics journey', replace: 'KNC Logistics Services redefines the logistics journey with a smarter, faster, and reliable approach to moving goods. Combine modern trucking with optimized routing to ensure real-time visibility.' }
+        { match: 'KNC redefines the logistics journey', replace: 'KNC Logistics Services redefines the logistics journey with a smarter, faster, and reliable approach to moving goods. Combine modern trucking with optimized routing to ensure real-time visibility.' }
     ];
 
     const replaceNode = (node) => {
@@ -358,11 +358,11 @@
                 }
             }
             
-            if (val.toLowerCase().includes('himon')) {
-                val = val.replace(/hello@himon\.com/gi, 'hello@masteryandprecise.com')
-                         .replace(/support@himon\.com/gi, 'info@knclogistics.com')
-                         .replace(/Himon Logistics/gi, 'KNC Logistics Services')
-                         .replace(/Himon/gi, 'KNC');
+            if (val.toLowerCase().includes('KNC')) {
+                val = val.replace(/hello@KNC\.com/gi, 'hello@masteryandprecise.com')
+                         .replace(/support@KNC\.com/gi, 'info@knclogistics.com')
+                         .replace(/KNC Logistics Services/gi, 'KNC Logistics Services')
+                         .replace(/KNC/gi, 'KNC');
             }
             
             if (val.includes('53589') || val.includes('180 Avenue') || val.includes('MADE BY') || val.toLowerCase().includes('sang do')) {
@@ -452,7 +452,7 @@
         const elements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, div[data-framer-component-type="RichTextContainer"]');
         for (let el of elements) {
             let tc = el.textContent || '';
-            if (!tc.includes('Himon') && !tc.includes('himon')) continue;
+            if (!tc.includes('KNC') && !tc.includes('KNC')) continue;
             
             // Find the deepest element containing the text to minimize collateral damage
             let current = el;
@@ -461,7 +461,7 @@
                 foundDeeper = false;
                 for (let i = 0; i < current.children.length; i++) {
                     let childTc = current.children[i].textContent || '';
-                    if (childTc.includes('Himon') || childTc.includes('himon')) {
+                    if (childTc.includes('KNC') || childTc.includes('KNC')) {
                         current = current.children[i];
                         foundDeeper = true;
                         break;
@@ -479,12 +479,12 @@
                 }
             }
 
-            // If no exact paragraph matched, do a global Himon -> KNC replacement on this text node
-            if (!replaced && (current.textContent.includes('Himon') || current.textContent.includes('himon'))) {
-                let newText = current.textContent.replace(/hello@himon\.com/gi, 'hello@masteryandprecise.com')
-                         .replace(/support@himon\.com/gi, 'info@knclogistics.com')
-                         .replace(/Himon Logistics/gi, 'KNC Logistics Services')
-                         .replace(/Himon/gi, 'KNC');
+            // If no exact paragraph matched, do a global KNC -> KNC replacement on this text node
+            if (!replaced && (current.textContent.includes('KNC') || current.textContent.includes('KNC'))) {
+                let newText = current.textContent.replace(/hello@KNC\.com/gi, 'hello@masteryandprecise.com')
+                         .replace(/support@KNC\.com/gi, 'info@knclogistics.com')
+                         .replace(/KNC Logistics Services/gi, 'KNC Logistics Services')
+                         .replace(/KNC/gi, 'KNC');
                 current.textContent = newText;
             }
         }
