@@ -536,7 +536,7 @@
         for (let el of elements) {
             let tc = el.textContent || '';
                         let isTestimonial = tc.toLowerCase().includes('marcus sterling') || tc.toLowerCase().includes('techlogistics');
-            if (!isTestimonial && !tc.toLowerCase().includes('himon') && tc.trim() !== 'KNC' && tc.trim() !== 'KNC Logistics Services') continue;
+            if (!isTestimonial && tc.trim() !== 'SITEMAP' && !tc.toLowerCase().includes('himon') && tc.trim() !== 'KNC' && tc.trim() !== 'KNC Logistics Services') continue;
             
             if (isTestimonial) {
                 let sec = el.closest('section');
@@ -583,17 +583,26 @@
                 }
             }
             
-            // Inject logo into Sitemap footer if it's not already there
-            let sitemap = document.querySelector('div[data-framer-name="Sitemap"]');
-            if (sitemap && !sitemap.querySelector('.knc-sitemap-logo')) {
-                let img = document.createElement('img');
-                img.src = '/knc-logo.png';
-                img.alt = 'KNC Logo';
-                img.className = 'knc-sitemap-logo';
-                img.style.width = '160px'; // Large enough to match their circle
-                img.style.marginTop = '40px'; 
-                img.style.display = 'block';
-                sitemap.appendChild(img);
+            // Safely inject logo into Sitemap footer by finding the SITEMAP text element
+            if (current.textContent.trim() === 'SITEMAP') {
+                let sitemapContainer = current.parentElement;
+                // Go up until we find the container that holds both the title and the links
+                while (sitemapContainer && (!sitemapContainer.querySelector('nav') && sitemapContainer.children.length < 2)) {
+                    sitemapContainer = sitemapContainer.parentElement;
+                }
+                // Fallback if not found
+                if (!sitemapContainer) sitemapContainer = current.parentElement.parentElement;
+                
+                if (sitemapContainer && !sitemapContainer.querySelector('.knc-sitemap-logo')) {
+                    let img = document.createElement('img');
+                    img.src = '/knc-logo.png';
+                    img.alt = 'KNC Logo';
+                    img.className = 'knc-sitemap-logo';
+                    img.style.width = '140px';
+                    img.style.marginTop = '40px'; 
+                    img.style.display = 'block';
+                    sitemapContainer.appendChild(img);
+                }
             }
 
             if (!replaced && current.textContent.toLowerCase().includes('himon')) {
