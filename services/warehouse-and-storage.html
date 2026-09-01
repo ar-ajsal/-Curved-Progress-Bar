@@ -359,7 +359,7 @@
             }
             
             if (val.toLowerCase().includes('himon')) {
-                val = val.replace(/hello@himon\.com/gi, 'hello@knclogistics.com')
+                val = val.replace(/hello@himon\.com/gi, 'hello@masteryandprecise.com')
                          .replace(/support@himon\.com/gi, 'info@knclogistics.com')
                          .replace(/Himon Logistics/gi, 'KNC Logistics Services')
                          .replace(/Himon/gi, 'KNC');
@@ -482,7 +482,7 @@
 
             // If no exact paragraph matched, do a global Himon -> KNC replacement on this text node
             if (!replaced && (current.textContent.includes('Himon') || current.textContent.includes('himon'))) {
-                let newText = current.textContent.replace(/hello@himon\.com/gi, 'hello@knclogistics.com')
+                let newText = current.textContent.replace(/hello@himon\.com/gi, 'hello@masteryandprecise.com')
                          .replace(/support@himon\.com/gi, 'info@knclogistics.com')
                          .replace(/Himon Logistics/gi, 'KNC Logistics Services')
                          .replace(/Himon/gi, 'KNC');
