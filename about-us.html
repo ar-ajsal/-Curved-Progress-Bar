@@ -546,7 +546,7 @@
             }
 
             // If no exact paragraph matched, do a global Himon -> KNC replacement on this text node
-                        // Restore the massive KNC footer text and shift it up to fix the gap
+                        // Safely center the massive KNC footer text without breaking Framer's layout
             if (current.textContent.trim() === 'KNC' || current.textContent.trim() === 'HIMON') {
                 let size = window.getComputedStyle(current).fontSize || '0px';
                 if (parseInt(size) > 80) {
@@ -555,16 +555,8 @@
                     current.style.setProperty('width', '100%', 'important');
                     if (current.parentElement) {
                         current.parentElement.style.removeProperty('display');
-                        current.parentElement.style.setProperty('transform', 'translateY(-40px)', 'important');
-                        current.parentElement.style.setProperty('margin-bottom', '-40px', 'important');
                         current.parentElement.style.setProperty('width', '100%', 'important');
-                        current.parentElement.style.setProperty('display', 'flex', 'important');
-                        current.parentElement.style.setProperty('justify-content', 'center', 'important');
-                    }
-                    if (current.parentElement && current.parentElement.parentElement) {
-                        current.parentElement.parentElement.style.setProperty('width', '100%', 'important');
-                        current.parentElement.parentElement.style.setProperty('display', 'flex', 'important');
-                        current.parentElement.parentElement.style.setProperty('justify-content', 'center', 'important');
+                        current.parentElement.style.setProperty('text-align', 'center', 'important');
                     }
                 }
             }
