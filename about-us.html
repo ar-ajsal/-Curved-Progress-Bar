@@ -543,30 +543,9 @@
     setTimeout(injectTeam, 3000);
 })();
 
-    // Force hard reload on all internal links to prevent Framer React Router from fetching old JSON chunks
-    document.addEventListener("click", function(e) {
-        var a = e.target.closest("a");
-        if (a && a.href && a.href.startsWith(window.location.origin)) {
-            e.preventDefault();
-            e.stopPropagation();
-            window.location.href = a.href;
-        }
-    }, true);
 
-    // Monkey-patch History API to kill Framer programmatic routing (fixes the "need to refresh every page" issue)
-    const originalPushState = history.pushState;
-    history.pushState = function() {
-        originalPushState.apply(this, arguments);
-        window.location.reload();
-    };
-    const originalReplaceState = history.replaceState;
-    history.replaceState = function() {
-        originalReplaceState.apply(this, arguments);
-        // Do not reload on replaceState to avoid infinite reload loops on initial load
-    };
-    window.addEventListener("popstate", function() {
-        window.location.reload();
-    });
+
+
 </script>
 </head>
 <body>
@@ -705,5 +684,31 @@
 	<!-- Start of bodyEnd -->
     
     <!-- End of bodyEnd -->
+<script id="knc-nav-fix">
+    // Force hard reload on all internal links to prevent Framer React Router from fetching old JSON chunks
+    document.addEventListener("click", function(e) {
+        var a = e.target.closest("a");
+        if (a && a.href && a.href.startsWith(window.location.origin)) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = a.href;
+        }
+    }, true);
+
+    // Monkey-patch History API to kill Framer programmatic routing (fixes the "need to refresh every page" issue)
+    const originalPushState = history.pushState;
+    history.pushState = function() {
+        originalPushState.apply(this, arguments);
+        window.location.reload();
+    };
+    const originalReplaceState = history.replaceState;
+    history.replaceState = function() {
+        originalReplaceState.apply(this, arguments);
+        // Do not reload on replaceState to avoid infinite reload loops on initial load
+    };
+    window.addEventListener("popstate", function() {
+        window.location.reload();
+    });
+</script>
 </body>
 </html>
