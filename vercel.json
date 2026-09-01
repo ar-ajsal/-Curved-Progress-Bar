@@ -1,0 +1,15 @@
+﻿{
+  "rewrites": [
+    { "source": "/about-us", "destination": "/about-us.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/services", "destination": "/services.html" },
+    { "source": "/solutions", "destination": "/solutions.html" },
+    { "source": "/services/freight-trucking", "destination": "/services/freight-trucking.html" },
+    { "source": "/services/last-mile-delivery", "destination": "/services/last-mile-delivery.html" },
+    { "source": "/services/container-transport", "destination": "/services/container-transport.html" },
+    { "source": "/services/express-distribution", "destination": "/services/express-distribution.html" },
+    { "source": "/services/warehouse-and-storage", "destination": "/services/warehouse-and-storage.html" },
+    { "source": "/legal/privacy-policy", "destination": "/legal/privacy-policy.html" },
+    { "source": "/legal/term-and-service", "destination": "/legal/term-and-service.html" }
+  ]
+}
