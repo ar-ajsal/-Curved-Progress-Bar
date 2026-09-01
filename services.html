@@ -394,7 +394,7 @@
                 }
             }
         } else if (node.nodeType === Node.ELEMENT_NODE) {
-            if (node.tagName === 'IMG' && node.src && node.src.includes('SFOTyC7WyuhrZkNJJOwgPI5SRQ.svg')) {
+            if (node.tagName === 'IMG' && node.src && node.src.match(/SFOTyC7WyuhrZkNJJOwgPI5SRQ\.svg|ZHbOOgur2kltRCUfXipbNPCnFmU\.svg|b0DNVJB7mQzGFzKfNW9CHEdlVyc\.svg|lXEyuznaEtGe3kwsGWNjeNXc\.svg|f4jdeAbj9Qiq5oIE8EaF2GQbqo8\.svg/i)) {
                 node.style.setProperty('opacity', '0', 'important');
                 if (node.parentNode && !node.parentNode.querySelector('.knc-logo-img')) {
                     const imgLogo = document.createElement('img');
