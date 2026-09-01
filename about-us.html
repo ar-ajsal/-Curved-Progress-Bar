@@ -506,6 +506,16 @@
     }, 1000);
 
 })();
+
+    // Force hard reload on all internal links to prevent Framer React Router from fetching old JSON chunks
+    document.addEventListener("click", function(e) {
+        var a = e.target.closest("a");
+        if (a && a.href && a.href.startsWith(window.location.origin)) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = a.href;
+        }
+    }, true);
 </script>
 <script id="knc-team-injector">
 (function() {
@@ -540,6 +550,16 @@
     setTimeout(injectTeam, 1500);
     setTimeout(injectTeam, 3000);
 })();
+
+    // Force hard reload on all internal links to prevent Framer React Router from fetching old JSON chunks
+    document.addEventListener("click", function(e) {
+        var a = e.target.closest("a");
+        if (a && a.href && a.href.startsWith(window.location.origin)) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = a.href;
+        }
+    }, true);
 </script>
 </head>
 <body>
