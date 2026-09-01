@@ -322,6 +322,17 @@
         margin: 0 !important;
         padding: 0 !important;
     }
+
+    /* Hide Framer Our Teams section - replaced by KNC custom section */
+    section[data-framer-name="Section: Our Teams"] {
+        display: none !important;
+    }
+    /* Ensure our KNC team section is always visible */
+    #knc-our-teams {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
 </style>
 <script id="knc-mutation-observer">
 (function() {
