@@ -370,6 +370,10 @@
                          .replace(/180 Avenue des Pins.*?Switzerland/g, 'Riyadh, Kingdom of Saudi Arabia')
                          .replace(/SANG DO/gi, 'Cyberthic');
             }
+            if (val.includes('All rights reserved') || val.includes('2024') || val.includes('2025')) {
+                val = val.replace(/2024/g, '2026').replace(/2025/g, '2026');
+            }
+            }
             
             if (val !== origVal) {
                 node.nodeValue = val;
