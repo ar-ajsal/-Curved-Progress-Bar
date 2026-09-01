@@ -554,27 +554,7 @@
                 }
             }
             
-            // Safely inject logo into Sitemap footer by finding the SITEMAP text element
-            if (current.textContent.trim() === 'SITEMAP') {
-                let sitemapContainer = current.parentElement;
-                // Go up until we find the container that holds both the title and the links
-                while (sitemapContainer && (!sitemapContainer.querySelector('nav') && sitemapContainer.children.length < 2)) {
-                    sitemapContainer = sitemapContainer.parentElement;
-                }
-                // Fallback if not found
-                if (!sitemapContainer) sitemapContainer = current.parentElement.parentElement;
-                
-                if (sitemapContainer && !sitemapContainer.querySelector('.knc-sitemap-logo')) {
-                    let img = document.createElement('img');
-                    img.src = '/knc-logo.png';
-                    img.alt = 'KNC Logo';
-                    img.className = 'knc-sitemap-logo';
-                    img.style.width = '140px';
-                    img.style.marginTop = '40px'; 
-                    img.style.display = 'block';
-                    sitemapContainer.appendChild(img);
-                }
-            }
+
 
             if (!replaced && current.textContent.toLowerCase().includes('himon')) {
                 let newText = current.textContent.replace(/hello@himon\.com/gi, 'hello@masteryandprecise.com')
