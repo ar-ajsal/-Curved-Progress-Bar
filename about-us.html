@@ -341,23 +341,11 @@
 <script id="knc-mutation-observer">
 (function() {
     const paragraphReplacements = [
-        { match: 'website template for logistics', replace: 'KNC Logistics Services is a Foreign Investment Company (LLC) headquartered in Riyadh, Saudi Arabia, delivering integrated and innovative logistics solutions including freight forwarding, customs clearance, inland transportation, warehousing, and business consultancy.' },
-        { match: 'performance driven fleet to help businesses simplify', replace: 'KNC Logistics Services brings together experienced professionals, technology-driven operations, and an end-to-end supply chain capability to help businesses simplify their logistics challenges and deliver every shipment with confidence.' },
-        { match: 'emerged as a response to the evolving needs of modern commerce', replace: 'Founded on the principles of precision and innovation, KNC Logistics Solutions emerged to address the evolving logistics needs of the Saudi Arabian market. Established as a Foreign Investment Company (LLC) headquartered in Riyadh, KNC has grown into an integrated logistics and business solutions provider.' },
-        { match: 'digital tracking, automated routing', replace: 'We built our foundation with technology-driven operations, professional team development, and a strong vendor and subcontractor network.' },
-        { match: 'expanded into container transport', replace: 'We expanded our service portfolio across freight forwarding, customs clearance, inland transportation, warehousing, project logistics, and business consultancy.' },
-        { match: 'supports leading brands and delivers thousands', replace: 'Today KNC Logistics Services supports clients across Saudi Arabia and beyond, delivering integrated logistics solutions aligned with Vision 2030.' },
-        { match: '145,000 shipments managed', replace: 'A commitment to delivering integrated, innovative, and value-driven logistics solutions with full transparency, security, and precision across every shipment.' },
-        { match: 'collaborates with manufacturers, retailers, distributors', replace: 'KNC Logistics Services collaborates with manufacturers, businesses, and logistics networks across Saudi Arabia and the GCC region. Our partnerships are built on transparency, professionalism, and the ability to deliver consistent performance at scale.' },
-        { match: 'optimizing routes and upgrading our performance', replace: 'Learn how KNC Logistics is optimizing routes and upgrading operations to reduce environmental impact across the supply chain.' },
-        { match: 'Join hundreds of global enterprises', replace: 'Join businesses across Saudi Arabia and the GCC optimizing their supply chain with KNC Logistics Services.' },
-        { match: 'What types of transportation services', replace: 'What types of logistics services does KNC Logistics Services provide?' },
-        { match: 'advanced AI and a performance-driven', replace: 'KNC Logistics Services brings together our expert team, technology-driven operations, and a capable fleet to help simplify complex supply chain challenges and deliver logistics solutions that create real value.' },
         { match: 'unifies human expertise, AI-powered systems', replace: 'KNC Logistics Services unifies human expertise, technology-driven systems, and a capable fleet to help businesses simplify complex supply chain operations and deliver with confidence.' },
         { match: 'integrates our expert teams, cutting-edge technology', replace: 'KNC Logistics Services integrates expert teams, reliable technology, and a strong vendor network to help businesses navigate complex supply chains and achieve on-time delivery.' },
         { match: 'powerful data platforms, and a resilient fleet', replace: 'KNC Logistics Services combines dedicated personnel, proven logistics platforms, and a resilient network to empower businesses with end-to-end visibility and control across the supply chain.' },
         { match: 'where technology meets operational', replace: 'Join a growing team where professionalism meets innovation. Build impactful solutions and grow alongside the leaders of integrated logistics in Saudi Arabia.' },
-        { match: 'KNC redefines the logistics journey', replace: 'KNC Logistics Services redefines the logistics journey with a smarter, faster, and reliable approach to moving goods. Combine modern trucking with optimized routing to ensure real-time visibility.' }
+        { match: 'redefines the logistics journey', replace: 'KNC Logistics Services redefines the logistics journey with a smarter, faster, and reliable approach to moving goods. Combine modern trucking with optimized routing to ensure real-time visibility.' }
     ];
 
     const replaceNode = (node) => {
@@ -373,11 +361,11 @@
                 }
             }
             
-            if (val.toLowerCase().includes('KNC')) {
-                val = val.replace(/hello@KNC\.com/gi, 'hello@masteryandprecise.com')
-                         .replace(/support@KNC\.com/gi, 'info@knclogistics.com')
-                         .replace(/KNC Logistics Services/gi, 'KNC Logistics Services')
-                         .replace(/KNC/gi, 'KNC');
+            if (val.toLowerCase().includes('himon')) {
+                val = val.replace(/hello@himon\.com/gi, 'hello@masteryandprecise.com')
+                         .replace(/support@himon\.com/gi, 'info@knclogistics.com')
+                         .replace(/Himon Logistics/gi, 'KNC Logistics Services')
+                         .replace(/Himon/gi, 'KNC');
             }
             
             if (val.includes('53589') || val.includes('180 Avenue') || val.includes('MADE BY') || val.toLowerCase().includes('sang do')) {
@@ -467,7 +455,7 @@
         const elements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, div[data-framer-component-type="RichTextContainer"]');
         for (let el of elements) {
             let tc = el.textContent || '';
-            if (!tc.includes('KNC') && !tc.includes('KNC')) continue;
+            if (!tc.toLowerCase().includes('himon')) continue;
             
             // Find the deepest element containing the text to minimize collateral damage
             let current = el;
@@ -476,7 +464,7 @@
                 foundDeeper = false;
                 for (let i = 0; i < current.children.length; i++) {
                     let childTc = current.children[i].textContent || '';
-                    if (childTc.includes('KNC') || childTc.includes('KNC')) {
+                    if (childTc.toLowerCase().includes('himon')) {
                         current = current.children[i];
                         foundDeeper = true;
                         break;
@@ -494,28 +482,18 @@
                 }
             }
 
-            // If no exact paragraph matched, do a global KNC -> KNC replacement on this text node
-            if (!replaced && (current.textContent.includes('KNC') || current.textContent.includes('KNC'))) {
-                let newText = current.textContent.replace(/hello@KNC\.com/gi, 'hello@masteryandprecise.com')
-                         .replace(/support@KNC\.com/gi, 'info@knclogistics.com')
-                         .replace(/KNC Logistics Services/gi, 'KNC Logistics Services')
-                         .replace(/KNC/gi, 'KNC');
+            // If no exact paragraph matched, do a global Himon -> KNC replacement on this text node
+            if (!replaced && current.textContent.toLowerCase().includes('himon')) {
+                let newText = current.textContent.replace(/hello@himon\.com/gi, 'hello@masteryandprecise.com')
+                         .replace(/support@himon\.com/gi, 'info@knclogistics.com')
+                         .replace(/Himon Logistics/gi, 'KNC Logistics Services')
+                         .replace(/Himon/gi, 'KNC');
                 current.textContent = newText;
             }
         }
     }, 1000);
 
 })();
-
-    // Force hard reload on all internal links to prevent Framer React Router from fetching old JSON chunks
-    document.addEventListener("click", function(e) {
-        var a = e.target.closest("a");
-        if (a && a.href && a.href.startsWith(window.location.origin)) {
-            e.preventDefault();
-            e.stopPropagation();
-            window.location.href = a.href;
-        }
-    }, true);
 </script>
 <script id="knc-team-injector">
 (function() {
