@@ -494,12 +494,18 @@
             }
 
             // If no exact paragraph matched, do a global Himon -> KNC replacement on this text node
-                        // Hide the massive KNC footer text
+                        // Adjust the massive KNC footer text to be a bit higher
             if (current.textContent.trim() === 'KNC' || current.textContent.trim() === 'HIMON') {
                 let size = window.getComputedStyle(current).fontSize || '0px';
                 if (parseInt(size) > 80) {
-                    current.style.setProperty('display', 'none', 'important');
-                    if (current.parentElement) current.parentElement.style.setProperty('display', 'none', 'important');
+                    // Remove the display:none overrides if any
+                    current.style.removeProperty('display');
+                    if (current.parentElement) {
+                        current.parentElement.style.removeProperty('display');
+                        // Shift it up slightly
+                        current.parentElement.style.setProperty('transform', 'translateY(-40px)', 'important');
+                        current.parentElement.style.setProperty('margin-bottom', '-40px', 'important');
+                    }
                 }
             }
             
