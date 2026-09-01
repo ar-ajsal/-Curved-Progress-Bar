@@ -1,4 +1,4 @@
-﻿{
+{
   "rewrites": [
     { "source": "/about-us", "destination": "/about-us.html" },
     { "source": "/contact", "destination": "/contact.html" },
