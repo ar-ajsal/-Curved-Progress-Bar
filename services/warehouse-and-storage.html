@@ -747,8 +747,53 @@ Our belief is that warehousing must be a dynamic, data-driven asset, not just a 
     setInterval(walkDOM, 500);
 })();
 </script>
+
+
+
+
+<script>
+// Moved KNC text script
+(function() {
+    function injectKncText() {
+        const container = document.querySelector('.framer-uu9h7k');
+        
+        if (container && !container.querySelector('.knc-moved-watermark')) {
+            const textDiv = document.createElement('div');
+            textDiv.classList.add('knc-moved-watermark');
+            textDiv.textContent = 'KNC';
+            textDiv.style.fontFamily = '"Syncopate", sans-serif';
+            textDiv.style.fontSize = '44px';
+            textDiv.style.fontWeight = '700';
+            textDiv.style.letterSpacing = '-0.1em';
+            textDiv.style.color = '#ffffff';
+            textDiv.style.marginTop = '24px';
+            textDiv.style.lineHeight = '1';
+            
+            container.appendChild(textDiv);
+            
+            // Hide huge watermark at bottom
+            const hugeWatermark = document.querySelector('.framer-9ul640');
+            if (hugeWatermark) {
+                hugeWatermark.style.setProperty('display', 'none', 'important');
+            }
+        }
+    }
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', injectKncText);
+    } else {
+        injectKncText();
+    }
+    setInterval(injectKncText, 1000);
+})();
+</script>
 </body>
 </html>
+
+
+
+
+
 
 
 
