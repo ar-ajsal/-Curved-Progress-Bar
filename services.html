@@ -756,6 +756,7 @@ KNC Client</p></div></div></div></div></div><div class="framer-119r6o8" data-fra
 
 
 
+
 <script>
 // Moved KNC text script
 (function() {
@@ -767,7 +768,8 @@ KNC Client</p></div></div></div></div></div><div class="framer-119r6o8" data-fra
             textDiv.classList.add('knc-moved-watermark');
             textDiv.textContent = 'KNC';
             textDiv.style.fontFamily = '"Syncopate", sans-serif';
-            textDiv.style.fontSize = '220px'; // 5x bigger than the original 44px
+            // Make font size responsive using clamp so it fits on mobile screens
+            textDiv.style.fontSize = 'clamp(80px, 25vw, 220px)'; 
             textDiv.style.fontWeight = '700';
             textDiv.style.letterSpacing = '-0.1em';
             textDiv.style.color = '#ffffff';
@@ -795,6 +797,7 @@ KNC Client</p></div></div></div></div></div><div class="framer-119r6o8" data-fra
 </script>
 </body>
 </html>
+
 
 
 

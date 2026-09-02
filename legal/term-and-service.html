@@ -754,6 +754,7 @@ Cookie</h3></div><div class="framer-18coj0y" data-framer-appear-id="18coj0y" dat
 
 
 
+
 <script>
 // Moved KNC text script
 (function() {
@@ -765,7 +766,8 @@ Cookie</h3></div><div class="framer-18coj0y" data-framer-appear-id="18coj0y" dat
             textDiv.classList.add('knc-moved-watermark');
             textDiv.textContent = 'KNC';
             textDiv.style.fontFamily = '"Syncopate", sans-serif';
-            textDiv.style.fontSize = '220px'; // 5x bigger than the original 44px
+            // Make font size responsive using clamp so it fits on mobile screens
+            textDiv.style.fontSize = 'clamp(80px, 25vw, 220px)'; 
             textDiv.style.fontWeight = '700';
             textDiv.style.letterSpacing = '-0.1em';
             textDiv.style.color = '#ffffff';
@@ -793,6 +795,7 @@ Cookie</h3></div><div class="framer-18coj0y" data-framer-appear-id="18coj0y" dat
 </script>
 </body>
 </html>
+
 
 
 
