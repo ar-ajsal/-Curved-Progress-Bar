@@ -494,14 +494,14 @@
             let tc = el.textContent || '';
                         let isTestimonial = tc.toLowerCase().includes('marcus sterling') || tc.toLowerCase().includes('techlogistics');
             // Safely inject logo into Sitemap footer by finding the SITEMAP text element
-            if (current.textContent.trim() === 'SITEMAP') {
-                let sitemapContainer = current.parentElement;
+            if (el.textContent.trim() === 'SITEMAP') {
+                let sitemapContainer = el.parentElement;
                 // Go up until we find the container that holds both the title and the links
                 while (sitemapContainer && (!sitemapContainer.querySelector('nav') && sitemapContainer.children.length < 2)) {
                     sitemapContainer = sitemapContainer.parentElement;
                 }
                 // Fallback if not found
-                if (!sitemapContainer) sitemapContainer = current.parentElement.parentElement;
+                if (!sitemapContainer) sitemapContainer = el.parentElement.parentElement;
                 
                 if (sitemapContainer && !sitemapContainer.querySelector('.knc-sitemap-logo')) {
                     let img = document.createElement('img');
@@ -748,5 +748,6 @@ Our belief is that express distribution must be a reliable, mission-critical par
 </script>
 </body>
 </html>
+
 
 
