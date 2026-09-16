@@ -363,19 +363,13 @@
     }
 
     /* Hide Framer Our Teams section - replaced by KNC custom section */
-    section[data-framer-name="Section: Our Teams"] {
-        display: none !important;
-    }
+    section[data-framer-name="Section: Our Teams"] { display: none !important; }
     /* Hide the Meet The Founder section as per user request */
     section[data-framer-name="Section: Meet The Founder"], .framer-17lku50 {
         display: none !important;
     }
     /* Ensure our KNC team section is always visible */
-    #knc-our-teams {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
+    #knc-our-teams { display: none !important; }
     /* Glassmorphism for the navbar */
     header[data-framer-name*="Desktop"], header[data-framer-name*="Phone"] {
         background-color: rgba(255, 255, 255, 0.75) !important;
@@ -720,7 +714,7 @@
 })();
 </script>
 <style> footer img[alt="KNC Logo"] { display: none !important; } </style>
-</head>
+<style> * { font-family: Arial, Helvetica, sans-serif !important; } </style></head>
 <body>
 	<script async src="https://events.framer.com/script?v=2" data-fid="89b0c7462afe2b6fcf1a1a96dd5115e9b888edf4ed3589a1eb155b339975e4a5" data-no-nt></script>
 	<!-- Start of bodyStart -->
