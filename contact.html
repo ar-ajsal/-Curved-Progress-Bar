@@ -10,7 +10,18 @@
 	
 	<script>try{if(localStorage.get("__framer_force_showing_editorbar_since")){const n=document.createElement("link");n.rel = "modulepreload";n.href="https://framer.com/edit/init.mjs";document.head.appendChild(n)}}catch(e){}</script>
 	<!-- Start of headStart -->
-    
+    <style id="knc-contact-exact-padding-fix">
+        div[data-framer-name="Container"] {
+            padding-top: 20px !important;
+        }
+        div.framer-1gl2f2c {
+            padding-top: 20px !important;
+        }
+        div[data-framer-name="Section: Hero"] {
+            padding-top: 0px !important;
+            margin-top: 0px !important;
+        }
+    </style>
     <!-- End of headStart -->
 	<meta name="viewport" content="width=device-width">
 	<meta name="generator" content="Framer 72b52f5">
@@ -436,6 +447,20 @@ form.framer-11moa0m:not(#knc-contact-form) {
 
 
 <style id="knc-framer-overrides">
+
+    div[data-framer-name="Hero"],
+    .framer-11d9d7g-container,
+    .framer-11d9d7g {
+        display: none !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+
+
+
 div[data-framer-name="Hero"] { display: none !important; margin: 0 !important; padding: 0 !important; height: 0 !important; }
 
     /* Hide the 'Made in Framer' badge */
@@ -1065,6 +1090,19 @@ a.framer-1sheavb[href="./contact.html"]:hover * {
     --framer-text-color: #0b131a !important;
 }
 </style>
+
+<style id="knc-mobile-whitespace-fix">
+    div[data-framer-name="Hero"],
+    .framer-11d9d7g-container,
+    .framer-11d9d7g {
+        display: none !important;
+        height: 0 !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+</style>
+
 </head>
 <body>
 <!--
@@ -1086,6 +1124,84 @@ a.framer-1sheavb[href="./contact.html"]:hover * {
   3) Just before the closing <script src="/knc-loader.js" defer></script>
 
     <script src="./prevent-404.js" defer></script>
+
+<script>
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const divs = Array.from(document.querySelectorAll('div, section, main'));
+        
+        // Find elements with huge padding/margin
+        divs.forEach(d => {
+            const style = window.getComputedStyle(d);
+            const pt = parseInt(style.paddingTop);
+            const mt = parseInt(style.marginTop);
+            if (pt > 150 || mt > 150) {
+                if (d.innerText && d.innerText.includes('Contact details')) {
+                    d.style.setProperty('padding-top', '0', 'important');
+                    d.style.setProperty('margin-top', '0', 'important');
+                }
+            }
+        });
+        
+        // Find empty tall divs
+        divs.forEach(d => {
+            const rect = d.getBoundingClientRect();
+            if (rect.height > 150 && !d.innerText.trim()) {
+                d.style.setProperty('display', 'none', 'important');
+            }
+        });
+    }, 1500);
+});
+</script>
+
+<script id="knc-contact-whitespace-killer">
+(function() {
+    function killWhitespace() {
+        const treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+            acceptNode: function(node) {
+                if (node.textContent.includes('Contact details') || node.textContent.includes('EMAIL & SUPPORT')) {
+                    return NodeFilter.FILTER_ACCEPT;
+                }
+                return NodeFilter.FILTER_SKIP;
+            }
+        });
+        
+        let node = treeWalker.nextNode();
+        if (node) {
+            let container = node.parentElement;
+            while (container && container !== document.body) {
+                // 1. Remove huge padding/margin on the container itself
+                const style = window.getComputedStyle(container);
+                if (parseInt(style.paddingTop) > 150) {
+                    container.style.setProperty('padding-top', '20px', 'important');
+                }
+                if (parseInt(style.marginTop) > 150) {
+                    container.style.setProperty('margin-top', '20px', 'important');
+                }
+                
+                // 2. Hide empty huge previous siblings
+                let prev = container.previousElementSibling;
+                while (prev) {
+                    const rect = prev.getBoundingClientRect();
+                    if (rect.height > 100 && prev.tagName !== 'HEADER' && prev.tagName !== 'NAV') {
+                        // If it has no useful text or images, it's just empty space
+                        if (!prev.innerText.trim() && !prev.querySelector('img, svg, canvas')) {
+                            prev.style.setProperty('display', 'none', 'important');
+                        }
+                    }
+                    prev = prev.previousElementSibling;
+                }
+                container = container.parentElement;
+            }
+        }
+    }
+    
+    window.addEventListener('load', () => {
+        setInterval(killWhitespace, 500);
+    });
+})();
+</script>
+
 </body> tag, add:
 
        <script src="/knc-loader.js" defer></script>

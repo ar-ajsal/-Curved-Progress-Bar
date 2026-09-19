@@ -27,18 +27,64 @@
             }
         });
     }
+    
+    function injectAggressiveCSS() {
+        if (!document.getElementById('knc-aggressive-css')) {
+            var style = document.createElement('style');
+            style.id = 'knc-aggressive-css';
+            style.innerHTML = `
+                .framer-11d9d7g-container, 
+                div[data-framer-name="Hero"],
+                .framer-11d9d7g { 
+                    display: none !important; 
+                    height: 0 !important; 
+                    min-height: 0 !important; 
+                    margin: 0 !important; 
+                    padding: 0 !important; 
+                    opacity: 0 !important;
+                    position: absolute !important;
+                    top: -9999px !important;
+                    pointer-events: none !important;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', removeNavbarItems);
+        document.addEventListener('DOMContentLoaded', function() {
+            injectAggressiveCSS();
+            removeNavbarItems();
+        });
     } else {
+        injectAggressiveCSS();
         removeNavbarItems();
     }
-    window.addEventListener('load', removeNavbarItems);
+    window.addEventListener('load', function() {
+        injectAggressiveCSS();
+        removeNavbarItems();
+    });
 
     // MutationObserver to ensure Framer rehydration never restores them
     try {
         var obs = new MutationObserver(function() {
+            injectAggressiveCSS();
             removeNavbarItems();
+            // Fix for large white space block on mobile and desktop
+            // Aggressively target known Hero components by data-framer-name or known classes
+            document.querySelectorAll('div[data-framer-name="Hero"], .framer-11d9d7g-container, .framer-11d9d7g, div[data-framer-name="Phone Hero"], div[data-framer-name="Mobile Hero"]').forEach(function(div) {
+                // If we are on contact page, we want NO hero!
+                if (window.location.href.includes('contact')) {
+                    div.style.setProperty('display', 'none', 'important');
+                    div.style.setProperty('height', '0', 'important');
+                    div.style.setProperty('margin', '0', 'important');
+                    div.style.setProperty('padding', '0', 'important');
+                    
+                    // Forcefully remove it from the DOM as well to be safe
+                    // But maybe removing causes React to crash? Let's hide it instead.
+                    div.innerHTML = ''; 
+                }
+            });
         });
         obs.observe(document.documentElement, { childList: true, subtree: true });
     } catch(e) {}
