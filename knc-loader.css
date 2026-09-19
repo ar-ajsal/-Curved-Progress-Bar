@@ -169,8 +169,8 @@ body.knc-loader-lock {
   );
   background-size: 260% 100%;
   background-position: -40% 0;
-  -webkit-mask-image: url('/knc-logo.png');
-  mask-image: url('/knc-logo.png');
+  -webkit-mask-image: url("./knc-logo.png");
+  mask-image: url("./knc-logo.png");
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
