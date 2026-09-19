@@ -1,31 +1,43 @@
-// Prevent 404 navigation to unimplemented pages and sanitize dead links
+// Prevent 404 navigation and completely remove removed navbar items
 (function() {
-    function sanitizeLinks() {
-        document.querySelectorAll('a').forEach(function(link) {
-            var href = link.getAttribute('href');
-            if (!href) return;
-            if (href.includes('blog') || href.includes('investor') || href.includes('career')) {
-                // If it's not a valid internal page
-                link.setAttribute('href', '#');
+    function removeNavbarItems() {
+        // Hide and remove Investor, Blog, and Career navbar containers
+        document.querySelectorAll('.framer-1h6fgh8-container, .framer-14f9sa7-container, .framer-1m9p5yz-container').forEach(function(el) {
+            el.style.setProperty('display', 'none', 'important');
+            el.remove();
+        });
+
+        // Also remove any nav/header links with text or href pointing to them
+        document.querySelectorAll('header nav a, header a, nav a').forEach(function(a) {
+            var text = (a.textContent || '').trim().toLowerCase();
+            var href = (a.getAttribute('href') || '').toLowerCase();
+            if (text === 'investor' || text === 'blog' || text === 'career' ||
+                href === './investors' || href === './blog' || href === './career' ||
+                href === '/investors' || href === '/blog' || href === '/career' ||
+                href === '../investors' || href === '../blog' || href === '../career') {
+                var container = a.closest('.framer-1h6fgh8-container, .framer-14f9sa7-container, .framer-1m9p5yz-container, div[class*="-container"]') || a;
+                container.style.setProperty('display', 'none', 'important');
+                container.remove();
             }
         });
     }
 
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', sanitizeLinks);
+        document.addEventListener('DOMContentLoaded', removeNavbarItems);
     } else {
-        sanitizeLinks();
+        removeNavbarItems();
     }
-    window.addEventListener('load', sanitizeLinks);
+    window.addEventListener('load', removeNavbarItems);
 
-    // Also observe DOM in case Framer rehydrates links
+    // MutationObserver to ensure Framer rehydration never restores them
     try {
         var obs = new MutationObserver(function() {
-            sanitizeLinks();
+            removeNavbarItems();
         });
         obs.observe(document.documentElement, { childList: true, subtree: true });
     } catch(e) {}
 
+    // Click handler for 404 prevention
     document.addEventListener('click', function(e) {
         const link = e.target.closest('a');
         if (!link) return;
@@ -77,7 +89,6 @@
             
             if (!isAllowed) {
                 e.preventDefault();
-                console.log('Prevented 404 navigation, making hash #:', link.href);
                 link.setAttribute('href', '#');
                 if (window.location.hash !== '#') {
                     history.pushState(null, '', '#');
