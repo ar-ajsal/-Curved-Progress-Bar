@@ -15,9 +15,15 @@
                 href === './investors' || href === './blog' || href === './career' ||
                 href === '/investors' || href === '/blog' || href === '/career' ||
                 href === '../investors' || href === '../blog' || href === '../career') {
-                var container = a.closest('.framer-1h6fgh8-container, .framer-14f9sa7-container, .framer-1m9p5yz-container, div[class*="-container"]') || a;
-                container.style.setProperty('display', 'none', 'important');
-                container.remove();
+                // Find the closest parent that is just a direct wrapper for this link, to avoid deleting the whole menu
+                var container = a.parentElement;
+                if (container && container.tagName !== 'NAV' && container.tagName !== 'HEADER' && container.classList.value.includes('-container')) {
+                    container.style.setProperty('display', 'none', 'important');
+                    container.remove();
+                } else {
+                    a.style.setProperty('display', 'none', 'important');
+                    a.remove();
+                }
             }
         });
     }
