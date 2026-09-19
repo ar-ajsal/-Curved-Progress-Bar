@@ -1,0 +1,70 @@
+<!--
+  KNC Logistics — Cinematic Preloader
+  ====================================
+  INTEGRATION
+
+  1) In <head>, before your other stylesheets, add:
+
+       <link rel="preload" as="image" href="/assets/knc-logo.png" fetchpriority="high">
+       <link rel="stylesheet" href="/knc-loader.css">
+
+     Preloading the logo means the very first frame the browser paints
+     already has the asset ready — no pop-in.
+
+  2) Paste the block below as the FIRST thing inside <body>, before any
+     other content, so it paints before the rest of the page.
+
+  3) Just before the closing </body> tag, add:
+
+       <script src="/knc-loader.js" defer></script>
+
+     The script self-initializes on DOMContentLoaded — nothing else to wire
+     up. It removes itself from the DOM and dispatches a `knc:loader:done`
+     event on `document` when finished, in case anything (e.g. a hero
+     animation) wants to start right after.
+
+  4) Adjust the asset path: the CSS sheen effect masks itself to the PNG's
+     exact shape, so knc-loader.css references "./assets/knc-logo.png" —
+     update that url() (and the <img src> below) to wherever you host the
+     file in your project.
+-->
+
+<div id="knc-loader" class="knc-loader" role="status" aria-live="polite">
+  <span class="knc-loader__sr">Loading KNC Logistics…</span>
+
+  <div class="knc-loader__glow" aria-hidden="true"></div>
+
+  <div class="knc-loader__stage">
+    <svg
+      class="knc-loader__orbits"
+      viewBox="0 0 400 400"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <ellipse
+        class="knc-loader__orbit-ring knc-loader__orbit-ring--a"
+        cx="200" cy="200" rx="192" ry="150"
+        pathLength="1"
+      ></ellipse>
+      <ellipse
+        class="knc-loader__orbit-ring knc-loader__orbit-ring--b"
+        cx="200" cy="200" rx="150" ry="192"
+        pathLength="1"
+      ></ellipse>
+    </svg>
+
+    <div class="knc-loader__mark">
+      <img
+        class="knc-loader__logo"
+        src="./assets/knc-logo.png"
+        alt=""
+        width="386"
+        height="386"
+        decoding="async"
+        fetchpriority="high"
+      />
+      <div class="knc-loader__sheen" aria-hidden="true"></div>
+      <div class="knc-loader__spark" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>
