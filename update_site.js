@@ -9,7 +9,11 @@ files.forEach(file => {
     let content = fs.readFileSync(filePath, 'utf8');
 
     // 1. Change website font theme to Arial
-    const fontStyle = '<style> * { font-family: Arial, Helvetica, sans-serif !important; } </style>';
+    const fontStyle = `<style> * { font-family: Arial, Helvetica, sans-serif !important; }
+        div[data-framer-name="Hero"] {
+            display: none !important;
+        }
+    </style>`;
     if (!content.includes('font-family: Arial, Helvetica, sans-serif !important')) {
         if (content.includes('</head>')) {
             content = content.replace('</head>', fontStyle + '</head>');
