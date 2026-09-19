@@ -10,6 +10,7 @@
     { "source": "/services/express-distribution", "destination": "/services/express-distribution.html" },
     { "source": "/services/warehouse-and-storage", "destination": "/services/warehouse-and-storage.html" },
     { "source": "/legal/privacy-policy", "destination": "/legal/privacy-policy.html" },
-    { "source": "/legal/term-and-service", "destination": "/legal/term-and-service.html" }
+    { "source": "/legal/term-and-service", "destination": "/legal/term-and-service.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
-}
+}
