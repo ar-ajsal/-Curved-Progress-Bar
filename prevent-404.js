@@ -33,7 +33,8 @@
             var style = document.createElement('style');
             style.id = 'knc-aggressive-css';
             style.innerHTML = `
-                .framer-11d9d7g-container, 
+                a:has(> div > .knc-logo-img) { overflow: visible !important; }
+                .framer-11d9d7g-container,
                 div[data-framer-name="Hero"],
                 .framer-11d9d7g { 
                     display: none !important; 
