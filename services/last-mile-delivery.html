@@ -11,7 +11,7 @@ KNC logistics
     <!-- End of headStart -->
 	<meta name="viewport" content="width=device-width">
 	<meta name="generator" content="Framer 72b52f5">
-	<title>Last-Mile Delivery - My Framer Site</title>
+	<title>Last-Mile Delivery - KNC Logistics Services</title>
     <meta name="description" content="KNC Logistics Services is a Foreign Investment Company (LLC) headquartered in Riyadh, Saudi Arabia, delivering integrated and innovative logistics solutions including freight forwarding, customs clearance, inland transportation, warehousing, and business consultancy.">
     <meta name="framer-search-index" content="https://framerusercontent.com/sites/EuD3h9e1Cu8kvzpJxj0lP/searchIndex-wTRbF4QAbbtj.json">
     <meta name="framer-search-index-fallback" content="https://framerusercontent.com/sites/EuD3h9e1Cu8kvzpJxj0lP/searchIndex-ErrhjLdZZE6B.json">
@@ -19,12 +19,12 @@ KNC logistics
     <link href="/knc-logo.png" rel="icon" media="(prefers-color-scheme: dark)">
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Last-Mile Delivery - My Framer Site">
+    <meta property="og:title" content="Last-Mile Delivery - KNC Logistics Services">
     <meta property="og:description" content="KNC Logistics Services is a Foreign Investment Company (LLC) headquartered in Riyadh, Saudi Arabia, delivering integrated and innovative logistics solutions including freight forwarding, customs clearance, inland transportation, warehousing, and business consultancy.">
     <meta property="og:image" content="https://framerusercontent.com/images/WPELciCivfeVh2kAAYaLcsBcnI.png">
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Last-Mile Delivery - My Framer Site">
+    <meta name="twitter:title" content="Last-Mile Delivery - KNC Logistics Services">
     <meta name="twitter:description" content="KNC Logistics Services is a Foreign Investment Company (LLC) headquartered in Riyadh, Saudi Arabia, delivering integrated and innovative logistics solutions including freight forwarding, customs clearance, inland transportation, warehousing, and business consultancy.">
     <meta name="twitter:image" content="https://framerusercontent.com/images/WPELciCivfeVh2kAAYaLcsBcnI.png">
 	
@@ -316,7 +316,7 @@ KNC logistics
 
     const replaceNode = (node) => {
         if (!node) return;
-        if (node.nodeType === Node.TEXT_NODE && node.nodeValue) {
+        if (node.nodeType === Node.TEXT_NODE && node.nodeValue && !(node.parentNode && /^(SCRIPT|STYLE)$/.test(node.parentNode.nodeName))) {
             let val = node.nodeValue;
             let origVal = val;
             
@@ -578,7 +578,7 @@ Our belief is that last-mile delivery must be a strategic, customer-centric diff
     function walkDOM() {
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, {
             acceptNode: function(node) {
-                if (!node.textContent || node.hasAttribute('data-replaced') || node.hasAttribute('data-clone')) return NodeFilter.FILTER_SKIP;
+                if (/^(SCRIPT|STYLE|NOSCRIPT)$/.test(node.tagName) || !node.textContent || node.hasAttribute('data-replaced') || node.hasAttribute('data-clone')) return NodeFilter.FILTER_SKIP;
                 for (let r of replacements) {
                     if (node.textContent.includes(r.match)) {
                         for (let i = 0; i < node.children.length; i++) {

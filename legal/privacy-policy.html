@@ -316,7 +316,7 @@ KNC logistics
 
     const replaceNode = (node) => {
         if (!node) return;
-        if (node.nodeType === Node.TEXT_NODE && node.nodeValue) {
+        if (node.nodeType === Node.TEXT_NODE && node.nodeValue && !(node.parentNode && /^(SCRIPT|STYLE)$/.test(node.parentNode.nodeName))) {
             let val = node.nodeValue;
             let origVal = val;
             
@@ -576,7 +576,7 @@ KNC logistics
     function walkDOM() {
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, {
             acceptNode: function(node) {
-                if (!node.textContent || node.hasAttribute('data-replaced') || node.hasAttribute('data-clone')) return NodeFilter.FILTER_SKIP;
+                if (/^(SCRIPT|STYLE|NOSCRIPT)$/.test(node.tagName) || !node.textContent || node.hasAttribute('data-replaced') || node.hasAttribute('data-clone')) return NodeFilter.FILTER_SKIP;
                 for (let r of replacements) {
                     if (node.textContent.includes(r.match)) {
                         for (let i = 0; i < node.children.length; i++) {
