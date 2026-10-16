@@ -490,14 +490,23 @@ div[data-framer-name="Hero"] { display: none !important; margin: 0 !important; p
                 }
             }
         } else if (node.nodeType === Node.ELEMENT_NODE) {
-            if (node.tagName === 'IMG' && ((node.src && node.src.match(/(lXEyuznaEtGe3kwsGWNjeNXc|f4jdeAbj9Qiq5oIE8EaF2GQbqo8|SFOTyC7WyuhrZkNJJOwgPI5SRQ|BSXabipJ2B71EtZ5FqOZVFCNyfQ|YgTvwh9c5bPxebrakuNuIOPLx4|ZHbOOgur2kltRCUfXipbNPCnFmU|b0DNVJB7mQzGFzKfNW9CHEdlVyc|KZi0MqgpKiFt1UzKRqzt2MxEHc|pqrsgadgEJ2rSscKCprFyweII|wg8XiCnE6Zqup822xnUifsc0hLM|DAmlClGfu5fSTO6VeTMTUH0yAss|sUwxcaOm3K8U7YoNh8KyFbU3w|RR6P8RcE62xKss1cizOxJyJgoU)\.svg/i)) || (node.alt && node.alt.toLowerCase().includes('himon')))) {
+            if (node.tagName === 'IMG' && ((node.src && node.src.match(/(lXEyuznaEtGe3kwsGWNjeNXc|f4jdeAbj9Qiq5oIE8EaF2GQbqo8|SFOTyC7WyuhrZkNJJOwgPI5SRQ|BSXabipJ2B71EtZ5FqOZVFCNyfQ|YgTvwh9c5bPxebrakuNuIOPLx4|ZHbOOgur2kltRCUfXipbNPCnFmU|b0DNVJB7mQzGFzKfNW9CHEdlVyc|KZi0MqgpKiFt1UzKRqzt2MxEHc|pqrsgadgEJ2rSscKCprFyweII|wg8XiCnE6Zqup822xnUifsc0hLM|DAmlClGfu5fSTO6VeTMTUH0yAss|sUwxcaOm3K8U7YoNh8KyFbU3w|RR6P8RcE62xKss1cizOxJyJgoU)\.svg/i)) || (node.alt && node.alt.toLowerCase().includes('himon')) || (!node.classList.contains('knc-logo-img') && node.getAttribute('src') === '/knc-logo.png' && node.closest('header')))) {
                 node.style.setProperty('opacity', '0', 'important');
                 if (node.parentNode && !node.parentNode.querySelector('.knc-logo-img')) {
                     const imgLogo = document.createElement('img');
                     imgLogo.className = 'knc-logo-img';
-                    imgLogo.src = '/knc-logo.png';
-                    imgLogo.style.cssText = "position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; object-position: left center; z-index: 10; transform: scale(1.35); transform-origin: left center;";
+                    imgLogo.src = '/knc-logo-header.png?v=2';
+                    imgLogo.style.cssText = "position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; object-position: left center; z-index: 10; transform: scale(1.65); transform-origin: left center;";
                     node.parentNode.appendChild(imgLogo);
+                    const logoLink = node.closest('a');
+                    const linkTf = logoLink ? getComputedStyle(logoLink).transform : 'none';
+                    if (linkTf && linkTf !== 'none') imgLogo.style.setProperty('transform', 'none');
+                    if (!document.getElementById('knc-logo-overflow')) {
+                        const st = document.createElement('style');
+                        st.id = 'knc-logo-overflow';
+                        st.textContent = 'a:has(.knc-logo-img) { overflow: visible !important; }';
+                        document.head.appendChild(st);
+                    }
                     
                     let oldText = node.parentNode.querySelector('.knc-logo-text');
                     if (oldText) oldText.remove();
@@ -542,6 +551,18 @@ div[data-framer-name="Hero"] { display: none !important; margin: 0 !important; p
         }
     };
     init();
+
+    // Framer's runtime rewrites document.title with its default site name; keep the brand name.
+    const fixTitle = () => {
+        if (document.title.indexOf('My Framer Site') !== -1) {
+            document.title = document.title.replace(/My Framer Site/g, 'KNC Logistics Services');
+        }
+        if (/(^|- )KNC$/.test(document.title)) {
+            document.title = document.title.replace(/KNC$/, 'KNC Logistics Services');
+        }
+    };
+    fixTitle();
+    new MutationObserver(fixTitle).observe(document.head || document.documentElement, { childList: true, subtree: true, characterData: true });
 
     // Aggressive catch-all for split-text animations or missed paragraphs
     setInterval(() => {
