@@ -1,95 +1,141 @@
 /**
- * KNC Logistics — Cinematic Preloader
- * ------------------------------------------------------------------
- * Zero dependencies. Pure CSS handles every frame of motion (GPU-friendly
- * transform / opacity / filter); this script only:
+ * KNC Logistics Services — page loader
  *
- *   1. Locks page scroll while the loader is on screen.
- *   2. Times the exit: the choreography has a natural finish point
- *      (MIN_MS), but if the page genuinely isn't ready yet, it waits a
- *      little longer for `load` — capped at MAX_MS so it can never hang.
- *   3. Respects prefers-reduced-motion with a much shorter hold.
- *   4. Cleans up after itself: unlocks scroll, hides the node, dispatches
- *      a `knc:loader:done` event, and removes the element from the DOM.
+ * Loaded synchronously from <head> so the loader paints before the site.
+ * It builds its own markup (styled by knc-loader.css), shows the logo intro,
+ * tracks real page-load progress, and then gets out of the way.
  *
- * Nothing here is required to make the animation play — it plays purely
- * from the CSS as soon as the markup is in the DOM. This script exists to
- * make the *exit* considerate of real page-load timing instead of firing
- * on a dumb fixed timer.
+ *  - First visit in a session: full intro (~2.4s minimum so the animation
+ *    can finish, longer only if the page is genuinely still loading).
+ *  - Later pages in the same session: a short branded hold, no intro.
+ *  - prefers-reduced-motion: no motion, very short hold.
+ *  - Never blocks longer than MAX_MS, even if `load` never fires.
  */
 (function () {
   "use strict";
 
-  var root = document.getElementById("knc-loader");
-  if (!root) return;
+  if (window.__kncLoader) return;
+  window.__kncLoader = true;
 
-  var prefersReduced =
-    window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var doc = document.documentElement;
+  var STORAGE_KEY = "knc-loader-seen";
 
-  // Natural end of the choreography (see knc-loader.css timeline comment),
-  // plus a short hold. Reduced-motion gets a much shorter, calmer hold.
-  var MIN_MS = prefersReduced ? 500 : 2850;
-  // Absolute ceiling — the loader will never block the site longer than this,
-  // even on a slow connection where `load` fires late.
-  var MAX_MS = prefersReduced ? 900 : 4200;
-  var EXIT_MS = prefersReduced ? 260 : 480;
+  var seen = false;
+  try { seen = sessionStorage.getItem(STORAGE_KEY) === "1"; } catch (e) {}
 
-  var htmlEl = document.documentElement;
-  var bodyEl = document.body;
-  htmlEl.classList.add("knc-loader-lock");
-  bodyEl.classList.add("knc-loader-lock");
+  var reduced = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
-  var started = performance.now();
-  var pageLoaded = document.readyState === "complete";
-  var exited = false;
+  var MIN_MS = reduced ? 250 : seen ? 450 : 2400;
+  var MAX_MS = 6000;
+  var EXIT_MS = 700;
 
-  window.addEventListener(
-    "load",
-    function () {
-      pageLoaded = true;
-    },
-    { once: true }
-  );
+  var LAYERS = [
+    ["orange", "bar"],
+    ["green", "bar"],
+    ["blue", "bar"],
+    ["grey", "bar"],
+    ["text", "text"]
+  ];
 
-  function elapsed() {
-    return performance.now() - started;
+  var root = document.createElement("div");
+  root.className = "knc-loader" + (seen || reduced ? " knc-loader--quick" : "");
+  root.setAttribute("role", "status");
+  root.setAttribute("aria-live", "polite");
+  root.setAttribute("aria-label", "Loading KNC Logistics Services");
+
+  var stage = document.createElement("div");
+  stage.className = "knc-loader__stage";
+
+  var logo = document.createElement("div");
+  logo.className = "knc-loader__logo";
+
+  var images = [];
+  LAYERS.forEach(function (l) {
+    var img = new Image();
+    img.className = "knc-loader__layer knc-loader__layer--" + l[1] + " knc-loader__layer--" + l[0];
+    img.alt = "";
+    img.setAttribute("aria-hidden", "true");
+    img.decoding = "sync";
+    img.src = "/knc-loader-" + l[0] + ".png";
+    images.push(img);
+    logo.appendChild(img);
+  });
+
+  var sheen = document.createElement("div");
+  sheen.className = "knc-loader__sheen";
+  logo.appendChild(sheen);
+
+  var road = document.createElement("div");
+  road.className = "knc-loader__road";
+  var fill = document.createElement("div");
+  fill.className = "knc-loader__fill";
+  road.appendChild(fill);
+
+  stage.appendChild(logo);
+  stage.appendChild(road);
+  root.appendChild(stage);
+
+  doc.classList.add("knc-loader-lock");
+  doc.appendChild(root);
+
+  var started = false;
+  var startedAt = 0;
+  var finished = false;
+  var shown = Date.now();
+  var progress = 0;
+
+  function begin() {
+    if (started) return;
+    started = true;
+    startedAt = Date.now();
+    root.classList.add("knc-loader--go");
   }
 
-  function tick() {
-    if (exited) return;
-    var t = elapsed();
-    var readyToExit = t >= MIN_MS && (pageLoaded || t >= MAX_MS);
-    if (readyToExit) {
-      exit();
-      return;
+  // Start the animation only once the artwork is decoded, so nothing pops in.
+  var decodes = images.map(function (img) {
+    return img.decode ? img.decode().catch(function () {}) : Promise.resolve();
+  });
+  Promise.all(decodes).then(begin, begin);
+  setTimeout(begin, 900);
+
+  function loadProgress() {
+    if (document.readyState === "complete") return 1;
+    if (document.readyState === "interactive") return 0.8;
+    return 0.45;
+  }
+
+  function setProgress(p) {
+    if (p <= progress) return;
+    progress = p;
+    fill.style.transform = "scaleX(" + p.toFixed(3) + ")";
+  }
+
+  function finish() {
+    if (finished) return;
+    finished = true;
+    setProgress(1);
+    try { sessionStorage.setItem(STORAGE_KEY, "1"); } catch (e) {}
+    setTimeout(function () {
+      root.classList.add("knc-loader--exit");
+      doc.classList.remove("knc-loader-lock");
+      setTimeout(function () {
+        if (root.parentNode) root.parentNode.removeChild(root);
+        window.dispatchEvent(new Event("knc:loader:done"));
+      }, EXIT_MS);
+    }, 380);
+  }
+
+  var timer = setInterval(function () {
+    var now = Date.now();
+    var since = started ? now - startedAt : 0;
+    // Bar fills with whichever is behind: the animation clock or the real load.
+    var timeP = Math.min(1, since / MIN_MS);
+    setProgress(Math.min(loadProgress(), timeP * 0.96));
+
+    var ready = document.readyState === "complete";
+    if ((ready && started && since >= MIN_MS) || now - shown >= MAX_MS) {
+      clearInterval(timer);
+      finish();
     }
-    requestAnimationFrame(tick);
-  }
-
-  function exit() {
-    if (exited) return;
-    exited = true;
-    root.classList.add("knc-loader--exit");
-
-    var finished = false;
-    var finish = function () {
-      if (finished) return;
-      finished = true;
-      root.classList.add("knc-loader--gone");
-      htmlEl.classList.remove("knc-loader-lock");
-      bodyEl.classList.remove("knc-loader-lock");
-      document.dispatchEvent(new CustomEvent("knc:loader:done"));
-      if (root.parentNode) {
-        root.parentNode.removeChild(root);
-      }
-    };
-
-    root.addEventListener("transitionend", finish, { once: true });
-    // Fallback in case transitionend doesn't fire (e.g. display changes
-    // mid-flight, or a browser quirk) — never leave the site locked.
-    window.setTimeout(finish, EXIT_MS + 120);
-  }
-
-  requestAnimationFrame(tick);
+  }, 100);
 })();
