@@ -455,7 +455,7 @@ div[data-framer-name="Hero"] { display: none !important; margin: 0 !important; p
             }
             
             if (val.toLowerCase().includes('himon')) {
-                val = val.replace(/hello@himon\.com/gi, 'hello@knc.com')
+                val = val.replace(/hello@himon\.com/gi, 'hello@knclogistics.com.sa')
                          .replace(/support@himon\.com/gi, 'info@knclogistics.com')
                          .replace(/Himon Logistics/gi, 'KNC Logistics Services')
                          .replace(/Himon/gi, 'KNC');
@@ -562,6 +562,20 @@ div[data-framer-name="Hero"] { display: none !important; margin: 0 !important; p
         }
     };
     fixTitle();
+
+    // Framer generates mailto: links from its own data (template address); point them at the real mailbox.
+    let mailQueued = false;
+    const fixMail = () => {
+        mailQueued = false;
+        document.querySelectorAll('a[href^="mailto:"]').forEach((a) => {
+            if (/@(himontsp|himon|masteryandprecise|knc)\./i.test(a.getAttribute('href'))) {
+                a.setAttribute('href', 'mailto:hello@knclogistics.com.sa');
+            }
+        });
+    };
+    fixMail();
+    new MutationObserver(() => { if (!mailQueued) { mailQueued = true; requestAnimationFrame(fixMail); } })
+        .observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['href'] });
     new MutationObserver(fixTitle).observe(document.head || document.documentElement, { childList: true, subtree: true, characterData: true });
 
     // Aggressive catch-all for split-text animations or missed paragraphs
@@ -648,7 +662,7 @@ div[data-framer-name="Hero"] { display: none !important; margin: 0 !important; p
 
 
             if (!replaced && current.textContent.toLowerCase().includes('himon')) {
-                let newText = current.textContent.replace(/hello@himon\.com/gi, 'hello@knc.com')
+                let newText = current.textContent.replace(/hello@himon\.com/gi, 'hello@knclogistics.com.sa')
                          .replace(/support@himon\.com/gi, 'info@knclogistics.com')
                          .replace(/Himon Logistics/gi, 'KNC Logistics Services')
                          .replace(/Himon/gi, 'KNC');
