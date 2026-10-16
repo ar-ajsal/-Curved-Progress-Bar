@@ -1,43 +1,30 @@
 /* ==========================================================================
-   KNC Logistics — Cinematic Preloader
+   KNC Logistics Services — page loader
    --------------------------------------------------------------------------
-   Self-contained, dependency-free styles for the branded loading sequence.
-   Colors below were sampled directly from the supplied logo asset so the
-   ambient/orbit elements sit in the same palette without touching the
-   logo's own pixels.
-
-   Sequence (see knc-loader.js for orchestration):
-     0.00s  ambient glow blooms in
-     0.15s  orbit rings begin drawing on
-     0.65s  logo mark settles into place (scale + blur + fade)
-     1.30s  orbit rings recede to a faint ambient texture
-     1.50s  light sheen sweeps across the logo (masked to its exact shape)
-     1.75s  brief spark at the arrow tip
-     ~2.85s hold complete, exit begins
-     ~3.30s fully gone, site interactive, scroll restored
+   Built from the logo itself: the four coloured bars (green, orange, grey,
+   blue) slide in one after another like a convoy, the KNC wordmark is drawn
+   in behind them, and a thin road-line underneath fills with real page-load
+   progress. Created by knc-loader.js; this file only styles it.
    ========================================================================== */
 
 :root {
-  --knc-white: #ffffff;
-  --knc-navy: #0b4d78;
-  --knc-navy-deep: #08233e;
-  --knc-navy-light: #3c88b9;
-  --knc-green: #198a50;
-  --knc-green-light: #409774;
-
-  --knc-ease-draw: cubic-bezier(0.65, 0, 0.35, 1);
-  --knc-ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
-  --knc-ease-out: cubic-bezier(0.33, 1, 0.68, 1);
-  --knc-ease-exit: cubic-bezier(0.4, 0, 1, 1);
-
-  --knc-logo-size: clamp(132px, 28vw, 248px);
+  --knc-navy: #000080;
+  --knc-green: #22b26b;
+  --knc-orange: #e8731a;
+  --knc-blue: #0f8fd1;
+  --knc-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --knc-ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --knc-logo-w: clamp(220px, 46vw, 420px);
 }
 
-/* Prevents scroll & touch-bounce while the loader owns the viewport. */
+/* The template's own dark loading curtain (it showed the old logo) is replaced. */
+.framer-1gdz00r-container {
+  display: none !important;
+}
+
 html.knc-loader-lock,
-body.knc-loader-lock {
+html.knc-loader-lock body {
   overflow: hidden !important;
-  height: 100%;
 }
 
 .knc-loader {
@@ -47,285 +34,212 @@ body.knc-loader-lock {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--knc-white);
-  overflow: hidden;
-  touch-action: none;
+  background: #ffffff;
   opacity: 1;
-  transition: opacity 480ms var(--knc-ease-exit);
+  transition: opacity 520ms ease, transform 620ms var(--knc-ease-inout), visibility 0s linear 620ms;
+  touch-action: none;
 }
 
 .knc-loader--exit {
   opacity: 0;
+  transform: translate3d(0, -3%, 0);
+  visibility: hidden;
   pointer-events: none;
 }
 
-.knc-loader.knc-loader--gone {
-  display: none;
+/* A very soft brand-colour wash so the white never feels flat. */
+.knc-loader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 50% at 18% 78%, rgba(34, 178, 107, 0.07), transparent 70%),
+    radial-gradient(55% 45% at 85% 22%, rgba(15, 143, 209, 0.07), transparent 70%);
+  pointer-events: none;
 }
 
-/* Screen-reader status text only — visually hidden. */
+.knc-loader__stage {
+  position: relative;
+  width: var(--knc-logo-w);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(22px, 4vw, 34px);
+}
+
+/* All logo layers share one canvas so they line up exactly. */
+.knc-loader__logo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1000 / 322;
+}
+
+.knc-loader__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Bars: slide in along the logo's own left-pointing direction, one by one. */
+.knc-loader__layer--bar {
+  transform: translate3d(14%, 0, 0);
+}
+
+.knc-loader--go .knc-loader__layer--bar {
+  animation: knc-bar-in 820ms var(--knc-ease-out) both;
+}
+.knc-loader--go .knc-loader__layer--orange { animation-delay: 0ms; }
+.knc-loader--go .knc-loader__layer--green  { animation-delay: 130ms; }
+.knc-loader--go .knc-loader__layer--blue   { animation-delay: 260ms; }
+.knc-loader--go .knc-loader__layer--grey   { animation-delay: 390ms; }
+
+/* Wordmark + tagline: revealed left-to-right once the bars have landed. */
+.knc-loader__layer--text {
+  clip-path: inset(0 100% 0 0);
+  transform: translate3d(-3%, 0, 0);
+}
+
+.knc-loader--go .knc-loader__layer--text {
+  animation: knc-text-in 900ms var(--knc-ease-out) 620ms both;
+}
+
+/* One soft light pass over the finished logo, masked to its exact shape. */
+.knc-loader__sheen {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(255, 255, 255, 0) 38%,
+    rgba(255, 255, 255, 0.85) 50%,
+    rgba(255, 255, 255, 0) 62%
+  );
+  background-size: 300% 100%;
+  background-position: 120% 0;
+  -webkit-mask: url("./knc-loader-text.png") center / 100% 100% no-repeat;
+  mask: url("./knc-loader-text.png") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.knc-loader--go .knc-loader__sheen {
+  animation: knc-sheen 900ms var(--knc-ease-inout) 1500ms both;
+}
+
+/* Road line: a track with a segmented brand-colour fill driven by real progress. */
+.knc-loader__road {
+  position: relative;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(0, 0, 128, 0.1);
+  overflow: hidden;
+  opacity: 0;
+}
+
+.knc-loader--go .knc-loader__road {
+  animation: knc-fade-in 500ms ease 700ms both;
+}
+
+.knc-loader__fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--knc-green) 0 33.33%,
+    var(--knc-orange) 33.33% 66.66%,
+    var(--knc-blue) 66.66% 100%
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 380ms var(--knc-ease-out);
+}
+
+/* A small light that travels along the finished line, like a headlight. */
+.knc-loader__fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 38px;
+  right: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75));
+  animation: knc-headlight 1.1s ease-in-out infinite;
+}
+
 .knc-loader__sr {
   position: absolute;
   width: 1px;
   height: 1px;
-  padding: 0;
   margin: -1px;
+  padding: 0;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
 }
 
-/* Extremely subtle ambient depth behind the mark — not a spotlight, a hint. */
-.knc-loader__glow {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(11, 77, 120, 0.06) 0%,
-    rgba(11, 77, 120, 0.03) 28%,
-    rgba(255, 255, 255, 0) 55%
-  );
-  opacity: 0;
-  animation: knc-glow-in 1000ms var(--knc-ease-out) 0ms both;
+/* Repeat visits in the same session: no intro, just a brief branded hold. */
+.knc-loader--quick .knc-loader__layer {
+  opacity: 1;
+  transform: none;
+  clip-path: none;
+  animation: none !important;
+}
+.knc-loader--quick .knc-loader__road {
+  opacity: 1;
+  animation: none !important;
+}
+.knc-loader--quick .knc-loader__sheen {
+  display: none;
 }
 
-.knc-loader__stage {
-  position: relative;
-  display: grid;
-  place-items: center;
+@keyframes knc-bar-in {
+  0%   { opacity: 0; transform: translate3d(14%, 0, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
-.knc-loader__mark {
-  position: relative;
-  width: var(--knc-logo-size);
-  aspect-ratio: 1 / 1;
-  opacity: 0;
-  transform: translate3d(16px, 14px, 0) scale(0.88);
-  filter: blur(8px);
-  animation: knc-mark-settle 950ms var(--knc-ease-settle) 650ms both;
-  will-change: transform, opacity, filter;
+@keyframes knc-text-in {
+  0%   { opacity: 0; clip-path: inset(0 100% 0 0); transform: translate3d(-3%, 0, 0); }
+  35%  { opacity: 1; }
+  100% { opacity: 1; clip-path: inset(0 0 0 0); transform: translate3d(0, 0, 0); }
 }
 
-.knc-loader__logo {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  user-select: none;
-  -webkit-user-drag: none;
+@keyframes knc-sheen {
+  0%   { opacity: 1; background-position: 120% 0; }
+  100% { opacity: 1; background-position: -20% 0; }
 }
 
-/* Orbit / globe-grid construction lines — echo the logo's own globe motif
-   without ever redrawing the logo itself. Scales with the mark via inset%. */
-.knc-loader__orbits {
-  position: absolute;
-  inset: -34%;
-  width: auto;
-  height: auto;
-  overflow: visible;
-  opacity: 0.6;
-  animation: knc-orbit-recede 700ms var(--knc-ease-out) 1300ms both,
-    knc-orbit-spin 48s linear infinite;
+@keyframes knc-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-.knc-loader__orbit-ring {
-  /* pathLength="1" is set as an SVG attribute in the markup (not settable
-     in CSS) so stroke-dasharray/-dashoffset can use a normalized 0–1 range
-     regardless of each ellipse's actual geometry. */
-  fill: none;
-  stroke-width: 1.4;
-  stroke-linecap: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
+@keyframes knc-headlight {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 1; }
 }
 
-.knc-loader__orbit-ring--a {
-  stroke: var(--knc-navy);
-  transform-origin: 200px 200px;
-  transform: rotate(-8deg);
-  animation: knc-orbit-draw 1000ms var(--knc-ease-draw) 150ms both;
-}
-
-.knc-loader__orbit-ring--b {
-  stroke: var(--knc-green);
-  transform-origin: 200px 200px;
-  transform: rotate(12deg);
-  animation: knc-orbit-draw 1000ms var(--knc-ease-draw) 300ms both;
-}
-
-/* Light sheen — masked to the logo's exact alpha shape, so the shimmer
-   only ever glints on real ink, never spills onto empty space. */
-.knc-loader__sheen {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  background: linear-gradient(
-    115deg,
-    rgba(255, 255, 255, 0) 40%,
-    rgba(255, 255, 255, 0.85) 49%,
-    rgba(148, 210, 235, 0.55) 52%,
-    rgba(255, 255, 255, 0) 62%
-  );
-  background-size: 260% 100%;
-  background-position: -40% 0;
-  -webkit-mask-image: url("./knc-logo.png");
-  mask-image: url("./knc-logo.png");
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  animation: knc-sheen-sweep 900ms var(--knc-ease-draw) 1500ms both;
-  pointer-events: none;
-}
-
-/* A brief spark exactly at the arrow tip, timed to the sheen passing over it. */
-.knc-loader__spark {
-  position: absolute;
-  top: 3.6%;
-  left: 93%;
-  width: 14%;
-  aspect-ratio: 1 / 1;
-  transform: translate(-50%, -50%) scale(0);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(148, 210, 235, 0.6) 35%,
-    rgba(148, 210, 235, 0) 70%
-  );
-  opacity: 0;
-  animation: knc-spark-pulse 550ms ease-out 1750ms both;
-  pointer-events: none;
-}
-
-@keyframes knc-glow-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes knc-mark-settle {
-  0% {
-    opacity: 0;
-    transform: translate3d(16px, 14px, 0) scale(0.88);
-    filter: blur(8px);
-  }
-  60% {
-    opacity: 1;
-    filter: blur(0);
-  }
-  100% {
-    opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-    filter: blur(0);
-  }
-}
-
-@keyframes knc-orbit-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes knc-orbit-recede {
-  from {
-    opacity: 0.6;
-  }
-  to {
-    opacity: 0.16;
-  }
-}
-
-@keyframes knc-orbit-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes knc-sheen-sweep {
-  0% {
-    opacity: 0;
-    background-position: -40% 0;
-  }
-  15% {
-    opacity: 0.9;
-  }
-  75% {
-    opacity: 0.55;
-  }
-  100% {
-    opacity: 0;
-    background-position: 140% 0;
-  }
-}
-
-@keyframes knc-spark-pulse {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.3);
-  }
-  45% {
-    opacity: 0.9;
-    transform: translate(-50%, -50%) scale(1.5);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.9);
-  }
-}
-
-/* Exit choreography — the mark dissolves slightly ahead of the backdrop
-   so the transition feels like moving forward into the site, not a hard cut. */
-.knc-loader--exit .knc-loader__mark {
-  transition: opacity 420ms var(--knc-ease-exit), transform 600ms var(--knc-ease-exit);
-  opacity: 0;
-  transform: translate3d(0, -6px, 0) scale(1.035);
-}
-
-.knc-loader--exit .knc-loader__orbits,
-.knc-loader--exit .knc-loader__glow {
-  transition: opacity 380ms var(--knc-ease-exit);
-  opacity: 0;
-}
-
-/* ==========================================================================
-   Reduced motion — a calm, fast crossfade. No transforms, no rotation,
-   no blur, no sheen. Respects the user's OS-level preference exactly.
-   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .knc-loader__glow,
-  .knc-loader__orbits,
+  .knc-loader,
+  .knc-loader__fill {
+    transition-duration: 1ms !important;
+  }
+  .knc-loader__layer,
+  .knc-loader__road {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    animation: none !important;
+  }
   .knc-loader__sheen,
-  .knc-loader__spark {
+  .knc-loader__fill::after {
     display: none;
-  }
-
-  .knc-loader__mark {
-    animation: knc-reduced-fade 350ms ease-out 0ms both;
-    filter: none;
-    transform: none;
-  }
-
-  .knc-loader--exit .knc-loader__mark {
-    transition: opacity 250ms ease-out;
-    transform: none;
-  }
-
-  @keyframes knc-reduced-fade {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+    animation: none !important;
   }
 }
