@@ -324,6 +324,11 @@ html body footer::before {
   overflow: visible;
 }
 
+/* The template's own line-art (text-free container) is hidden outright, so no part of it can peek out beside the KNC overlay */
+html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] > div[class*="-container"]:not(.knc-art) {
+  visibility: hidden !important;
+}
+
 /* Hero route overlay */
 .knc-route {
   position: absolute;
