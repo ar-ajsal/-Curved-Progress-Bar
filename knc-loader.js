@@ -9,7 +9,8 @@
  *    can finish, longer only if the page is genuinely still loading).
  *  - Later pages in the same session: a short branded hold, no intro.
  *  - prefers-reduced-motion: no motion, very short hold.
- *  - Never blocks longer than MAX_MS, even if `load` never fires.
+ *  - Waits for the hero heading to be visible (not just for `load`) so the loader
+ *    never hands over to a blank page; never blocks longer than MAX_MS.
  */
 (function () {
   "use strict";
@@ -26,7 +27,7 @@
   var reduced = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
 
   var MIN_MS = reduced ? 250 : seen ? 450 : 2400;
-  var MAX_MS = 6000;
+  var MAX_MS = 7500;
   var EXIT_MS = 700;
 
   var LAYERS = [
@@ -98,8 +99,26 @@
   Promise.all(decodes).then(begin, begin);
   setTimeout(begin, 900);
 
+  // True once the page's own primary heading has finished appearing (or there is none to wait for).
+  function contentReady() {
+    var hero = document.querySelector('[data-framer-name="Section: Hero"]');
+    if (!hero) return document.readyState === "complete";
+    var heads = hero.querySelectorAll("h1");
+    for (var i = 0; i < heads.length; i++) {
+      var h = heads[i];
+      var r = h.getBoundingClientRect();
+      if (r.width === 0 || r.height === 0) continue;
+      // the heading is split into per-letter spans; check the last one has appeared
+      var leaf = h.querySelector("span span:last-child") || h;
+      var op = 1;
+      for (var e = leaf; e && e !== document.documentElement; e = e.parentElement) op *= parseFloat(getComputedStyle(e).opacity);
+      return op >= 0.95;
+    }
+    return false;
+  }
+
   function loadProgress() {
-    if (document.readyState === "complete") return 1;
+    if (document.readyState === "complete") return contentReady() ? 1 : 0.92;
     if (document.readyState === "interactive") return 0.8;
     return 0.45;
   }
@@ -132,7 +151,7 @@
     var timeP = Math.min(1, since / MIN_MS);
     setProgress(Math.min(loadProgress(), timeP * 0.96));
 
-    var ready = document.readyState === "complete";
+    var ready = document.readyState === "complete" && contentReady();
     if ((ready && started && since >= MIN_MS) || now - shown >= MAX_MS) {
       clearInterval(timer);
       finish();

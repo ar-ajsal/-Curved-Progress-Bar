@@ -66,16 +66,6 @@
 
   function classify() {
     dedupeClones();
-    var firstH1 = null;
-    qa("h1").forEach(function (h) {
-      if (!visible(h)) return;
-      if (!firstH1) { firstH1 = h; return; }
-      // Only the primary page heading stays an H1 for assistive tech.
-      if (h.closest('[data-framer-name="Section: Hero"]')) { h.setAttribute("role", "heading"); h.setAttribute("aria-level", "1"); return; }
-      h.setAttribute("role", "heading");
-      h.setAttribute("aria-level", "3");
-    });
-
     // Long statements set as giant headings are lead paragraphs.
     qa("h2").forEach(function (h) {
       var t = (h.textContent || "").trim();
@@ -138,6 +128,52 @@
         h.classList.add("knc-step");
         if (io) io.observe(h);
       }
+    });
+
+    outline();
+  }
+
+  /* Heading outline. The page's own component bundle re-renders its original tags
+     after hydration (several H1s, lists marked up as headings), so the effective
+     outline is derived here: one H1, list entries nested under their section heading,
+     no skipped levels. The delivered HTML already carries the corrected tags. */
+  function setLevel(h, l) {
+    if (h.getAttribute("role") !== "heading") h.setAttribute("role", "heading");
+    if (h.getAttribute("aria-level") !== String(l)) h.setAttribute("aria-level", String(l));
+  }
+  function outline() {
+    var primary = null, prev = 0, lastReal = 0;
+    qa("h1,h2,h3,h4,h5,h6").forEach(function (h) {
+      if (!visible(h) || h.getAttribute("aria-hidden") === "true" || h.classList.contains("knc-lead")) return;
+      var t = (h.textContent || "").replace(/\s+/g, " ").trim();
+      var tag = +h.tagName.charAt(1);
+      // numbers, e-mail/phone/address lines are not headings
+      if (/^\d{1,3}$/.test(t) || /@|^\+?[\d\s]{8,}$|Kingdom of Saudi Arabia/.test(t)) {
+        if (h.getAttribute("role") !== "presentation") h.setAttribute("role", "presentation");
+        return;
+      }
+      if (tag === 1) {
+        if (!primary) {
+          primary = h;
+          h.removeAttribute("role"); h.removeAttribute("aria-level");
+          prev = 1; lastReal = 1;
+          return;
+        }
+        if (/^THAT MOVE WITH/i.test(t)) {      // second line of the split primary heading
+          h.setAttribute("aria-hidden", "true");
+          primary.setAttribute("aria-label", "Logistics that move with precision.");
+          return;
+        }
+        var lvl = /^Performance designed for your supply chain/i.test(t) ? 2 : Math.min(6, lastReal + 1);
+        setLevel(h, lvl);
+        prev = lvl;
+        return;
+      }
+      var level = tag;
+      if (level - prev > 1) level = prev + 1;  // never skip a level
+      if (level !== tag) setLevel(h, level);
+      else if (h.getAttribute("role") === "heading") { h.removeAttribute("role"); h.removeAttribute("aria-level"); }
+      prev = level; lastReal = level;
     });
   }
 
@@ -324,13 +360,71 @@
     }, { threshold: 0.35 });
   }
 
+  /* Safety net for per-letter headings: the export reveals them from its own scroll
+     triggers, which can miss a heading that is already on screen (fast scroll, tall
+     sticky blocks, small screens). If a heading is in view but its letters are still
+     faint after a moment, reveal it with the same staggered motion. */
+  var ioLetters = null;
+  function forceIfFaint(el) {
+    var r = el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight) return;
+    var spans = qa('span[style*="inline-block"]', el);
+    var faint = spans.some(function (s) { return parseFloat(getComputedStyle(s).opacity) < 0.9; });
+    if (!faint) return;
+    spans.forEach(function (s, i) { s.style.setProperty("--ki", i); });
+    el.classList.add("knc-force-reveal");
+  }
+  if ("IntersectionObserver" in window) {
+    ioLetters = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        setTimeout(function () { forceIfFaint(el); }, 900);
+        setTimeout(function () { forceIfFaint(el); }, 2200);
+      });
+    }, { threshold: 0.2 });
+  }
+  function watchLetterHeadings() {
+    if (!ioLetters) return;
+    qa("h1,h2,h3").forEach(function (el) {
+      if (el.__kncLetters) return;
+      if (qa('span[style*="inline-block"]', el).length < 3) return;
+      el.__kncLetters = true;
+      ioLetters.observe(el);
+    });
+  }
+
+  /* Skip link: lets keyboard and screen-reader users jump past the navigation. */
+  function ensureSkipLink() {
+    var target = qa('[data-framer-name="Section: Hero"]').filter(visible)[0];
+    if (target && target.id !== "knc-main") {
+      var old = document.getElementById("knc-main");
+      if (old && old !== target) old.removeAttribute("id");
+      target.id = "knc-main";
+      target.setAttribute("tabindex", "-1");
+    }
+    if (!document.querySelector(".knc-skip")) {
+      var a = document.createElement("a");
+      a.className = "knc-skip";
+      a.href = "#knc-main";
+      a.textContent = "Skip to main content";
+      a.addEventListener("click", function (ev) {
+        var t = document.getElementById("knc-main");
+        if (t) { ev.preventDefault(); t.focus({ preventScroll: false }); t.scrollIntoView({ block: "start" }); }
+      });
+      document.body.insertBefore(a, document.body.firstChild);
+    }
+  }
+
   var queued = false;
   function refresh() {
     queued = false;
+    ensureSkipLink();
     classify();
     prepareStats();
     buildHeroRoute();
     buildCardArt();
+    watchLetterHeadings();
   }
   function schedule() {
     if (queued) return;

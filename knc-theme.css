@@ -597,3 +597,50 @@ html body footer [data-framer-name="Contact"] a {
   line-height: 1.5;
   color: var(--knc-slate);
 }
+
+/* Staggered reveal used by knc-motion.js when a per-letter heading is in view but still faint */
+html body .knc-force-reveal span[style*="inline-block"] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: opacity 0.5s ease calc(var(--ki, 0) * 14ms), transform 0.6s var(--knc-ease) calc(var(--ki, 0) * 14ms);
+}
+
+/* ---------- 7. Accessibility ---------- */
+/* Visible keyboard focus everywhere (the export removes outlines); a light inner ring keeps it readable on dark sections. */
+html body :focus-visible {
+  outline: 3px solid var(--knc-blue) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.85) !important;
+  border-radius: 4px;
+}
+html body input:focus-visible,
+html body select:focus-visible,
+html body textarea:focus-visible {
+  outline-offset: 1px !important;
+  box-shadow: none !important;
+}
+
+/* Skip link: first tab stop, visible only when focused */
+.knc-skip {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 2147483001;
+  transform: translateY(-160%);
+  padding: 12px 18px;
+  border-radius: 8px;
+  background: var(--knc-ink);
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  transition: transform 0.2s var(--knc-ease);
+}
+.knc-skip:focus,
+.knc-skip:focus-visible {
+  transform: translateY(0);
+}
+#knc-main:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
