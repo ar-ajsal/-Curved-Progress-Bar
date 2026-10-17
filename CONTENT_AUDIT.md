@@ -56,6 +56,10 @@ These are not in the profile; they are generic marketing language kept for revie
 * **Technology claims in service-page copy and elsewhere**: "AI-driven", "IoT", "telematics", "predictive
   maintenance", "digital proof of delivery", "WMS", "climate sensors", "advanced AI", "global fleet", "global scale".
   The profile only says "technology-driven operations" and "strong vendor and subcontractor network".
+* FAQ question "Can I track my shipments in real time?" — the question is kept, its answer is now neutral
+  ("visibility at every stage … contact our team"). Confirm what tracking KNC actually offers.
+* Terms of Service still say "KNC's AI models, predictive analytics engines, and software are the exclusive
+  property of KNC" and the Privacy Policy lists "IoT telemetry" and "Predictive Analytics" as data uses.
 * Hero/intro lines such as "redefines the logistics journey … optimized routing … real-time visibility" and
   "Revolutionizing global commerce…".
 * Legal pages: generic template terms remain (**governing law and courts: Singapore**, "Data Protection Officer",

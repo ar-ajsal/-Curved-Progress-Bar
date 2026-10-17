@@ -26,6 +26,11 @@ html.knc-loader-lock,
 html.knc-loader-lock body {
   overflow: hidden !important;
 }
+/* The page is not visible behind the loader, so nothing that settles underneath it (hydration,
+   breakpoint swaps) can show up as a layout shift. The loader itself lives outside <body>. */
+html.knc-loader-lock body {
+  visibility: hidden !important;
+}
 
 .knc-loader {
   position: fixed;

@@ -1,8 +1,8 @@
 ﻿<!doctype html>
 <html lang="en" data-redirect-timezone="1">
 <head>
-<link rel="stylesheet" href="/knc-loader.css?v=3">
-<script src="/knc-loader.js?v=4"></script>
+<link rel="stylesheet" href="/knc-loader.css?v=4">
+<script src="/knc-loader.js?v=5"></script>
 
     <link rel="preload" as="image" href="/knc-logo.png" fetchpriority="high">
 
@@ -867,9 +867,9 @@ a.framer-1sheavb[href="./contact.html"]:hover * {
 
 
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="/knc-theme.css?v=14">
-<script src="/knc-motion.js?v=11" defer></script>
-<script src="/knc-content.js?v=2" defer></script>
+<link rel="stylesheet" href="/knc-theme.css?v=21">
+<script src="/knc-motion.js?v=18" defer></script>
+<script src="/knc-content.js?v=4" defer></script>
 </head>
 <body>
 <!--
@@ -957,68 +957,7 @@ a.framer-1sheavb[href="./contact.html"]:hover * {
     });
 </script>
 
-<script>
-(function() {
-    const replacements = [
-        { match: 'unifies human expertise, AI-powered systems', replace: 'KNC Logistics Services unifies human expertise, technology-driven systems, and a capable fleet to help businesses simplify complex supply chain operations and deliver with confidence.' },
-        { match: 'integrates our expert teams, cutting-edge technology', replace: 'KNC Logistics Services integrates expert teams, reliable technology, and a strong vendor network to help businesses navigate complex supply chains and achieve on-time delivery.' },
-        { match: 'powerful data platforms, and a resilient fleet', replace: 'KNC Logistics Services combines dedicated personnel, proven logistics platforms, and a resilient network to empower businesses with end-to-end visibility and control across the supply chain.' },
-        { match: 'where technology meets operational', replace: 'Join a growing team where professionalism meets innovation. Build impactful solutions and grow alongside the leaders of integrated logistics in Saudi Arabia.' },
-        { match: 'redefines the logistics journey', replace: 'KNC Logistics Services redefines the logistics journey with a smarter, faster, and reliable approach to moving goods. Combine modern trucking with optimized routing to ensure real-time visibility.' },
-        { match: 'Himon redefines the logistics journey', replace: 'KNC Logistics Services redefines the logistics journey with a smarter, faster, and reliable approach to moving goods. Combine modern trucking with optimized routing to ensure real-time visibility.' }
-    ];
-    
-    function walkDOM() {
-        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT, {
-            acceptNode: function(node) {
-                if (/^(SCRIPT|STYLE|NOSCRIPT)$/.test(node.tagName) || !node.textContent || node.hasAttribute('data-replaced') || node.hasAttribute('data-clone')) return NodeFilter.FILTER_SKIP;
-                for (let r of replacements) {
-                    if (node.textContent.includes(r.match)) {
-                        for (let i = 0; i < node.children.length; i++) {
-                            if (node.children[i].textContent && node.children[i].textContent.includes(r.match)) {
-                                return NodeFilter.FILTER_SKIP;
-                            }
-                        }
-                        return NodeFilter.FILTER_ACCEPT;
-                    }
-                }
-                return NodeFilter.FILTER_SKIP;
-            }
-        });
-        
-        let node;
-        let nodesToReplace = [];
-        while (node = walker.nextNode()) {
-            nodesToReplace.push(node);
-        }
-        
-        nodesToReplace.forEach(n => {
-            if (n.hasAttribute('data-replaced') || (n.nextElementSibling && n.nextElementSibling.hasAttribute('data-clone'))) return;
-            for (let r of replacements) {
-                if (n.textContent.includes(r.match)) {
-                    n.setAttribute('data-replaced', 'true');
-                    n.style.setProperty('display', 'none', 'important');
-                    
-                    const clone = document.createElement(n.tagName);
-                    clone.className = n.className;
-                    clone.textContent = r.replace;
-                    clone.setAttribute('data-clone', 'true');
-                    clone.style.cssText = window.getComputedStyle(n).cssText;
-                    clone.style.setProperty('opacity', '1', 'important');
-                    clone.style.setProperty('transform', 'none', 'important');
-                    clone.style.setProperty('visibility', 'visible', 'important');
-                    clone.style.setProperty('display', 'block', 'important');
-                    
-                    n.parentNode.insertBefore(clone, n.nextSibling);
-                    break;
-                }
-            }
-        });
-    }
-    
-    setInterval(walkDOM, 500);
-})();
-</script>
+
 
 
 

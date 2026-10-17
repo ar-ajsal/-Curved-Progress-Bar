@@ -99,8 +99,17 @@
   Promise.all(decodes).then(begin, begin);
   setTimeout(begin, 900);
 
+  // The site's own scripts keep loading (and hydrating the page) for a moment after `load`; leaving
+  // while they are still arriving makes the hero heading flash. Treat a quiet network as "settled".
+  var lastNet = performance.now();
+  try {
+    new PerformanceObserver(function () { lastNet = performance.now(); }).observe({ type: "resource", buffered: true });
+  } catch (e) {}
+  function networkSettled() { return performance.now() - lastNet > 700; }
+
   // True once the page's own primary heading has finished appearing (or there is none to wait for).
   function contentReady() {
+    if (!networkSettled()) return false;
     var hero = document.querySelector('[data-framer-name="Section: Hero"]');
     if (!hero) return document.readyState === "complete";
     var heads = hero.querySelectorAll("h1");

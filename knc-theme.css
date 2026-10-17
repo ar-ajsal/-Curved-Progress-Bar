@@ -569,8 +569,8 @@ html body p.knc-statement .kw {
   transform: translateY(6px);
 }
 html body p.knc-statement.knc-in .kw {
-  animation: knc-word-in 0.7s var(--knc-ease) both;
-  animation-delay: calc(var(--wi, 0) * 38ms);
+  animation: knc-word-in 0.5s var(--knc-ease) both;
+  animation-delay: calc(var(--wi, 0) * 24ms);
 }
 @keyframes knc-word-in {
   from { opacity: 0.22; transform: translateY(6px); }
@@ -640,7 +640,61 @@ html body textarea:focus-visible {
 .knc-skip:focus-visible {
   transform: translateY(0);
 }
-#knc-main:focus {
+#knc-main:focus,
+[data-framer-name="Section: Hero"]:focus {
   outline: none !important;
   box-shadow: none !important;
+}
+
+/* ---------- 8. Hero fallback ----------
+   The template's own hero photo (a third-party branded truck) must never show, and the
+   hero should already look right while the video buffers: a still from the video sits under it. */
+html body #hero .framer-123a0tk {
+  display: none !important;
+}
+html body #hero {
+  background-color: #0d1a24 !important;
+  background-image: url("/hero-poster-desktop.jpg") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+}
+@media (max-width: 809.98px) {
+  html body #hero {
+    background-image: url("/hero-poster-mobile.jpg") !important;
+    background-position: 62% center !important;
+  }
+}
+
+/* Reveal guarantee for elements the export tags for a scroll-in animation (see knc-motion.js) */
+html body .knc-force-appear {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: opacity 0.5s ease, transform 0.6s var(--knc-ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .knc-force-appear, html body .knc-force-reveal span[style*="inline-block"] { transition: none; }
+}
+
+/* The template's own loading curtain is replaced by knc-loader; a later rule in the export forces it
+   back on (display:flex !important), so it is hidden here with higher specificity. */
+html body .framer-1gdz00r-container {
+  display: none !important;
+}
+
+/* The header logo link has no box of its own (its image is absolutely positioned), so draw the focus ring on the image */
+html body a:has(.knc-logo-img):focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+html body a:has(.knc-logo-img):focus-visible .knc-logo-img {
+  outline: 3px solid var(--knc-blue);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Reduced motion: the dashed road divider stops moving (needs the same specificity as the rule it overrides) */
+@media (prefers-reduced-motion: reduce) {
+  html body [data-framer-name^="Section:"]:not([data-framer-name="Section: Hero"])::after {
+    animation: none !important;
+  }
 }

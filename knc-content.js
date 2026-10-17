@@ -129,6 +129,23 @@
       "KNC Logistics Services is committed to delivering innovative, reliable, and value-driven business solutions."]
   ];
 
+  /* ---------------- 2b. Whole-paragraph replacements (text split over several nodes) ---------------- */
+  var BLOCKS = {
+    "Our global fleet is powered by IoT sensors, delivering consistent performance, predictive maintenance, and efficiency on every route from port to customer.":
+      "Freight forwarding, customs clearance, inland and cross-border transport and project logistics under one roof.",
+    "We utilize AI-driven systems and expert personnel to provide 24/7 proactive support, ensuring flexible adaptation to complex international shipping.":
+      "Experienced professionals and a strong vendor and subcontractor network, matched to every job.",
+    "Our commitment to safety is enforced by automated compliance checks and real-time risk assessment, guaranteeing adherence to all international trade codes and zero tolerance.":
+      "We own the execution, with safety built into every stage of the job."
+  };
+
+  /* Paragraphs identified by a distinctive phrase (the template's original wording). */
+  var PARTIAL = [
+    ["unifies human expertise, AI-powered systems", "KNC Logistics Services unifies human expertise, technology-driven systems, and a capable fleet to help businesses simplify complex supply chain operations and deliver with confidence."],
+    ["integrates our expert teams, cutting-edge technology", "KNC Logistics Services integrates expert teams, reliable technology, and a strong vendor network to help businesses navigate complex supply chains and achieve on-time delivery."],
+    ["powerful data platforms, and a resilient fleet", "KNC Logistics Services combines dedicated personnel, proven logistics platforms, and a resilient network to empower businesses with end-to-end visibility and control across the supply chain."]
+  ];
+
   /* ---------------- 3. Statements built from word-reveal components ---------------- */
   var STATEMENTS = [
     { start: "KNCbringstogetherpeople", text: "KNC brings together experienced logistics professionals, technology-driven operations and a strong vendor and subcontractor network to deliver complete, end-to-end supply chain solutions." },
@@ -181,6 +198,24 @@
     });
     qa("[aria-label]").forEach(function (e) {
       if (/morden/i.test(e.getAttribute("aria-label"))) e.setAttribute("aria-label", e.getAttribute("aria-label").replace(/morden/gi, "modern"));
+    });
+  }
+
+  function replaceBlocks() {
+    qa("p,h1,h2,h3,h4,h5,h6").forEach(function (el) {
+      if (el.hasAttribute("data-knc-replaced") || el.hasAttribute("data-knc-replacement")) return;
+      var t = norm(el.textContent);
+      if (t.length < 40) return;
+      var text = Object.prototype.hasOwnProperty.call(BLOCKS, t) ? BLOCKS[t] : null;
+      if (!text) for (var i = 0; i < PARTIAL.length; i++) if (t.indexOf(PARTIAL[i][0]) !== -1) { text = PARTIAL[i][1]; break; }
+      if (!text) return;
+      var c = document.createElement(el.tagName);
+      c.className = el.className;
+      ["data-styles-preset", "dir", "style"].forEach(function (a) { if (el.getAttribute(a)) c.setAttribute(a, el.getAttribute(a)); });
+      c.setAttribute("data-knc-replacement", "true");
+      c.textContent = text;
+      hideOriginal(el);
+      el.parentNode.insertBefore(c, el.nextSibling);
     });
   }
 
@@ -275,6 +310,7 @@
     fixTypos();
     replaceStatements();
     replaceHeadings();
+    replaceBlocks();
     fixLinks();
   }
   function schedule() {

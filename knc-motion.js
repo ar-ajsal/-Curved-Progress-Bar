@@ -69,7 +69,7 @@
     // Long statements set as giant headings are lead paragraphs.
     qa("h2").forEach(function (h) {
       var t = (h.textContent || "").trim();
-      if (t.length > 100) mark(h, "knc-lead", "paragraph");
+      if (t.length > 100) mark(h, "knc-lead", "presentation");
     });
 
     // Statement blocks built as word-by-word reveal components (.word divs):
@@ -150,6 +150,7 @@
       // numbers, e-mail/phone/address lines are not headings
       if (/^\d{1,3}$/.test(t) || /@|^\+?[\d\s]{8,}$|Kingdom of Saudi Arabia/.test(t)) {
         if (h.getAttribute("role") !== "presentation") h.setAttribute("role", "presentation");
+        h.removeAttribute("aria-level");
         return;
       }
       if (tag === 1) {
@@ -207,10 +208,12 @@
     updateTracker();
   }
 
+  var docH = 0;
   function updateTracker() {
     ticking = false;
     if (!tracker) return;
-    var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    if (!docH) return;   // the observer supplies the height; never force a layout from here
+    var max = Math.max(1, docH - window.innerHeight);
     var p = Math.min(1, Math.max(0, window.scrollY / max));
     trackerFill.style.transform = "scaleX(" + p.toFixed(4) + ")";
     var x = p * (window.innerWidth - 8);
@@ -384,6 +387,34 @@
       });
     }, { threshold: 0.2 });
   }
+  /* Same guarantee for any element the export marks for a scroll-in reveal. */
+  var ioAppear = null;
+  function forceAppear(el) {
+    var r = el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > window.innerHeight || r.width === 0) return;
+    var op = 1;
+    for (var e = el; e && e !== document.documentElement; e = e.parentElement) op *= parseFloat(getComputedStyle(e).opacity);
+    if (op < 0.9) el.classList.add("knc-force-appear");
+  }
+  if ("IntersectionObserver" in window) {
+    ioAppear = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        var el = e.target;
+        setTimeout(function () { forceAppear(el); }, 1100);
+        setTimeout(function () { forceAppear(el); }, 2600);
+      });
+    }, { threshold: 0.2 });
+  }
+  function watchAppear() {
+    if (!ioAppear) return;
+    qa("[data-framer-appear-id]").forEach(function (el) {
+      if (el.__kncAppear) return;
+      el.__kncAppear = true;
+      ioAppear.observe(el);
+    });
+  }
+
   function watchLetterHeadings() {
     if (!ioLetters) return;
     qa("h1,h2,h3").forEach(function (el) {
@@ -396,43 +427,87 @@
 
   /* Skip link: lets keyboard and screen-reader users jump past the navigation. */
   function ensureSkipLink() {
+    // Never replace an id the page already depends on (the home hero is #hero).
     var target = qa('[data-framer-name="Section: Hero"]').filter(visible)[0];
-    if (target && target.id !== "knc-main") {
-      var old = document.getElementById("knc-main");
-      if (old && old !== target) old.removeAttribute("id");
-      target.id = "knc-main";
-      target.setAttribute("tabindex", "-1");
+    if (target) {
+      if (!target.id) target.id = "knc-main";
+      if (target.getAttribute("tabindex") === null) target.setAttribute("tabindex", "-1");
     }
-    if (!document.querySelector(".knc-skip")) {
-      var a = document.createElement("a");
-      a.className = "knc-skip";
-      a.href = "#knc-main";
-      a.textContent = "Skip to main content";
-      a.addEventListener("click", function (ev) {
-        var t = document.getElementById("knc-main");
-        if (t) { ev.preventDefault(); t.focus({ preventScroll: false }); t.scrollIntoView({ block: "start" }); }
+    var link = document.querySelector(".knc-skip");
+    if (!link) {
+      link = document.createElement("a");
+      link.className = "knc-skip";
+      link.textContent = "Skip to main content";
+      link.addEventListener("click", function (ev) {
+        var t = qa('[data-framer-name="Section: Hero"]').filter(visible)[0];
+        if (t) { ev.preventDefault(); t.focus({ preventScroll: true }); t.scrollIntoView({ block: "start" }); }
       });
-      document.body.insertBefore(a, document.body.firstChild);
+      document.body.insertBefore(link, document.body.firstChild);
     }
+    link.setAttribute("href", "#" + (target && target.id ? target.id : "knc-main"));
+  }
+
+  /* Structure the export leaves out: one main landmark, labelled navigation landmarks,
+     list semantics for the ticker, and empty alt text on decorative images. */
+  function a11yStructure() {
+    qa("img:not([alt])").forEach(function (i) { i.setAttribute("alt", ""); });
+
+    if (!q("main, [role=main]")) {
+      var secs = qa('[data-framer-name^="Section:"]').filter(visible);
+      var lca = secs[0];
+      while (lca && !secs.every(function (x) { return lca.contains(x); })) lca = lca.parentElement;
+      if (lca && lca !== document.body && !lca.querySelector("header, footer")) lca.setAttribute("role", "main");
+    }
+
+    qa("nav").forEach(function (n) {
+      if (n.hasAttribute("aria-label")) return;
+      n.setAttribute("aria-label", n.closest("footer") ? "Footer navigation" : "Main navigation");
+    });
+
+    // The phone header's menu toggle is an icon-only button.
+    qa("button").forEach(function (b) {
+      if (b.getAttribute("aria-label") || (b.textContent || "").trim() || b.getAttribute("aria-labelledby")) return;
+      if (b.closest("header")) b.setAttribute("aria-label", "Menu");
+    });
+
+    qa("li[aria-posinset]").forEach(function (li) {
+      var p = li.parentElement;
+      if (p && p.getAttribute("role") !== "list") p.setAttribute("role", "list");
+      li.setAttribute("role", "listitem");
+    });
+
+    qa("select, input, textarea").forEach(function (f) {
+      if (f.type === "hidden" || f.getAttribute("aria-label") || f.id && q('label[for="' + f.id + '"]')) return;
+      if (f.closest("label")) return;
+      var name = f.getAttribute("name") || f.getAttribute("placeholder");
+      if (name) f.setAttribute("aria-label", name);
+    });
   }
 
   var queued = false;
   function refresh() {
     queued = false;
+    a11yStructure();
     ensureSkipLink();
     classify();
     prepareStats();
     buildHeroRoute();
     buildCardArt();
     watchLetterHeadings();
+    watchAppear();
   }
+  // Hydration fires hundreds of DOM mutations in a burst: wait for it to go quiet (but never longer than ~2.5s).
+  var firstQueued = 0, quietTimer = 0;
   function schedule() {
-    if (queued) return;
-    queued = true;
-    setTimeout(function () { requestAnimationFrame(refresh); }, 220);
+    var now = Date.now();
+    if (!firstQueued) firstQueued = now;
+    clearTimeout(quietTimer);
+    quietTimer = setTimeout(function () { firstQueued = 0; requestAnimationFrame(refresh); }, now - firstQueued > 2500 ? 0 : 450);
   }
 
   function boot() {
+    // Page height comes from the observer (no forced layout); the scroll handler only reads the cached value.
+    if ("ResizeObserver" in window) new ResizeObserver(function (entries) { docH = Math.round(entries[0].contentRect.height); }).observe(document.body);
     buildTracker();
     refresh();
     window.addEventListener("scroll", onScroll, { passive: true });
