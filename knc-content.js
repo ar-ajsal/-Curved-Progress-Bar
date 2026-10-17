@@ -283,6 +283,9 @@
   /* ---------------- 5. Links ---------------- */
   var MAPS = "https://www.google.com/maps/search/?api=1&query=Riyadh%2C%20Saudi%20Arabia";
   function fixLinks() {
+    qa('a[data-framer-name="Logo"]').forEach(function (a) {
+      if (a.getAttribute("href") !== "/") a.setAttribute("href", "/");
+    });
     qa('a[href^="tel:"]').forEach(function (a) {
       if (a.getAttribute("href") !== "tel:+966502746895") a.setAttribute("href", "tel:+966502746895");
     });

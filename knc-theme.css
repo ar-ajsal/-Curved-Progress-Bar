@@ -329,6 +329,63 @@ html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] 
   visibility: hidden !important;
 }
 
+/* Solution section: the template used a 900px spacer + sticky layers for its scroll-driven word reveal.
+   The statement now reveals on its own, so the spacer is dropped and the layers flow normally (no dead white space). */
+html body [data-framer-name="Section: Solution"] [data-framer-name="Container"].framer-1skzdlm {
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+html body [data-framer-name="Section: Solution"] [data-framer-name="Blank space"] { display: none !important; }
+html body [data-framer-name="Section: Solution"] [data-framer-name="Main Solution"] { order: 0; }
+html body [data-framer-name="Section: Solution"] [data-framer-name="Background sticky"] {
+  order: 1;
+  position: relative !important;
+  top: auto !important;
+  height: clamp(220px, 34vw, 480px) !important;
+  overflow: hidden !important;
+}
+html body [data-framer-name="Section: Solution"] [data-framer-name="Text title reveal"] {
+  order: 2;
+  position: relative !important;
+  inset: auto !important;
+  transform: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: clamp(56px, 8vw, 120px) 0 !important;
+}
+html body [data-framer-name="Section: Solution"] [data-framer-name="Text title reveal"] [data-framer-name="Square Frame"] {
+  height: auto !important;
+  aspect-ratio: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  padding: 0 24px !important;
+}
+html body [data-framer-name="Section: Solution"] [data-framer-name="Text title reveal"] [class*="-container"]:not(:has(.knc-statement)) {
+  position: absolute !important;
+}
+
+/* Solutions: same statement block (Section: Introduction) */
+html body [data-framer-name="Section: Introduction"] > [data-framer-name="Container"] { height: auto !important; min-height: 0 !important; }
+html body [data-framer-name="Section: Introduction"] [data-framer-name="Text title reveal"] {
+  position: relative !important;
+  inset: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: clamp(56px, 8vw, 120px) 0 !important;
+}
+html body [data-framer-name="Section: Introduction"] [data-framer-name="Square Frame"] {
+  height: auto !important;
+  aspect-ratio: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  padding: 0 24px !important;
+}
+html body [data-framer-name="Section: Introduction"] [data-framer-name="Square Frame"] > [data-framer-name="Box"] { display: none !important; }
+html body [data-framer-name="Section: Introduction"] [data-framer-name="Square Frame"] [class*="-container"]:not(:has(.knc-statement)) { position: absolute !important; }
+html body [data-framer-name="Section: Introduction"] p.knc-statement,
+html body [data-framer-name="Section: Introduction"] p.knc-statement .kw { color: var(--knc-navy, #000080) !important; }
+
 /* Hero route overlay */
 .knc-route {
   position: absolute;
