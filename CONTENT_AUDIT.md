@@ -62,8 +62,10 @@ These are not in the profile; they are generic marketing language kept for revie
   property of KNC" and the Privacy Policy lists "IoT telemetry" and "Predictive Analytics" as data uses.
 * Hero/intro lines such as "redefines the logistics journey … optimized routing … real-time visibility" and
   "Revolutionizing global commerce…".
-* Legal pages: generic template terms remain (**governing law and courts: Singapore**, "Data Protection Officer",
-  "IoT telemetry", "Predictive Analytics"). Needs review by the client's legal adviser.
+* Legal pages: generic template terms remain ("Data Protection Officer", "IoT telemetry", "Predictive Analytics").
+  The unsupported **Singapore governing-law / courts clause was removed** from the Terms of Service (section 6 deleted,
+  "Amendments" renumbered). The Terms now name no governing law: **the client's legal adviser must confirm the
+  governing law (presumably the Kingdom of Saudi Arabia) and review both legal pages before launch.**
 * Hidden "Our Teams" block on the About page contains named individuals' CVs (not in the profile). It is not
   displayed; remove it from the source if it will not be used.
 * Photography is stock imagery that shows third-party brands (Maersk, UASC, Scania, Volk). Replace with KNC/Freyta photography when available.
@@ -77,3 +79,40 @@ These are not in the profile; they are generic marketing language kept for revie
   backend (e.g. a form service or serverless function) is still recommended.
 * Mojibake (`â€™`, `â€¢`) in the HTML source, including list bullets on the legal pages — fixed.
 * Template brand name "Himon" still present in the source copy — replaced.
+
+## 5. Final verification results (branch `fix/site-audit-signoff`)
+
+**Tested:** all 12 pages at 390, 820 and 1440 px; home, services, solutions, freight-trucking and contact also at
+360 and 430 px (46 scripted scroll runs, down and up, with screenshots). Result: **0 page errors, 0 failed requests,
+0 console errors, 0 broken links**. Text reveals, scroll effects, counters, hero route animation, truck tracker and
+solution-card art all run on phone and desktop; no text is stuck invisible. Loader-to-hero hand-off has no blank frame.
+Reduced motion: 0 looping animations, all text visible.
+
+**Performance (mobile, throttled):** original LCP about 6 s, CLS 0.111, up to 10.9 MB → now LCP about 1.1 s, CLS 0,
+about 3 MB. **Accessibility:** axe-core 0 violations; one H1 per page, no skipped heading levels.
+**Build:** none — this is a static site (`server.js` / Vercel serves the files); JS syntax checked.
+
+Items the scripted runs flag but that are intentional: the scrolling marquee, the 15 %-opacity "KNC LOGISTICS"
+watermark on Contact, dimmed non-active rows in the services list, and section labels that reveal on the next scroll step.
+
+### Production-domain changes still needed
+* Add `<link rel="canonical">` and `og:url` on every page once the production domain is final.
+* `og:image` / `twitter:image` currently use `https://curved-progress-bar.vercel.app/og-image.png` — change to the
+  production domain (image file: `og-image.png`, 1200×630).
+* Social accounts: the footer social column is hidden. Provide KNC's real LinkedIn / X / Instagram / YouTube URLs to restore it.
+
+### Contact form
+It does **not** submit to a server. Submitting opens the visitor's email app with a pre-filled message to
+`hello@knclogistics.com.sa`, and the page says so. Visitors without a mail client cannot send. Recommended before
+launch: a form service or serverless endpoint.
+
+### Needs client approval before launch
+1. Replace or confirm the Container Transport, Last-Mile Delivery and Express Distribution service pages (not in the profile).
+2. Approve or remove remaining AI / IoT / telematics / "real-time" wording (service pages, hero/intro lines, Terms, Privacy).
+3. Confirm what shipment tracking KNC offers (FAQ).
+4. Legal review of Terms and Privacy; confirm governing law.
+5. Supply social URLs, production domain, and KNC/Freyta photography (current stock images show third-party brands).
+6. Delete or approve the hidden "Our Teams" CVs on About.
+
+Known limitation: copy lives in Framer's hosted bundle, so some headings are re-rendered at hydration; a runtime
+pass keeps the outline correct, but the Framer project itself should be updated if it is kept as the source.

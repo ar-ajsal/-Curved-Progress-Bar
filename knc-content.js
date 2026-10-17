@@ -107,12 +107,15 @@
     "Whether you are a startup or an enterprise, our flexible solutions grow with your business, adapting to your changing market needs.":
       "A strong vendor and subcontractor network and project logistics capability to match the right resources to every job.",
 
-    // Legal pages
+    // Legal pages. The governing-law clause named Singapore (template text); removed until KNC's legal adviser supplies it.
+    "6. GOVERNING LAW AND DISPUTE RESOLUTION": "",
+    "7. AMENDMENTS": "6. AMENDMENTS",
     "Our Terms Cookie": "Our Terms"
   };
 
   /* ---------------- 2. Pattern clean-ups (regex on a text node's value) ---------------- */
   var PATTERNS = [
+    [/^\s*These Terms shall be governed by and construed in accordance with the laws of Singapore[^]*$/, ""],
     // Template typos
     [/^(\s*)We delivers\b/, "$1We deliver"],
     // Legal pages: text pasted from an unrelated job advertisement and layout notes
