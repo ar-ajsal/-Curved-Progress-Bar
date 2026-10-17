@@ -286,6 +286,28 @@
     qa('a[data-framer-name="Logo"]').forEach(function (a) {
       if (a.getAttribute("href") !== "/") a.setAttribute("href", "/");
     });
+    // Template links with no KNC page behind them
+    qa("nav a, header a, footer a").forEach(function (a) {
+      if (/^\s*(Investors?|Careers?|Blog)\s*$/i.test(a.textContent || "")) {
+        var box = a.closest("li") || a;
+        box.style.setProperty("display", "none", "important");
+      }
+    });
+    // Desktop navbar: add a "Home" link before Services (the mobile menu already has one)
+    qa('nav[data-framer-name="Menu item"]').forEach(function (nav) {
+      if (nav.querySelector("[data-knc-home]")) return;
+      var first = nav.firstElementChild;
+      if (!first || !first.querySelector("a")) return;
+      var clone = first.cloneNode(true);
+      clone.setAttribute("data-knc-home", "1");
+      var a = clone.querySelector("a");
+      a.setAttribute("href", "/");
+      var path = location.pathname.replace(/\/+$/, "");
+      if (path === "" || path === "/index" || path === "/index.html") a.setAttribute("aria-current", "page");
+      var t = clone.querySelector("p");
+      if (t) t.textContent = "Home";
+      nav.insertBefore(clone, first);
+    });
     qa('a[href^="tel:"]').forEach(function (a) {
       if (a.getAttribute("href") !== "tel:+966502746895") a.setAttribute("href", "tel:+966502746895");
     });
