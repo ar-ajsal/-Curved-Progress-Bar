@@ -572,6 +572,10 @@ html body p.knc-statement.knc-in .kw {
   animation: knc-word-in 0.5s var(--knc-ease) both;
   animation-delay: calc(var(--wi, 0) * 24ms);
 }
+/* Light sections: the template's pale statement colour is unreadable on white; the empty "Box" squares only collide with the text */
+html body [data-framer-name="Section: Solution"] p.knc-statement { color: var(--knc-navy, #0a1450) !important; }
+html body [data-framer-name="Section: Solution"] p.knc-statement .kw { color: inherit !important; }
+html body [data-framer-name="Section: Solution"] [data-framer-name="Square Frame"] > [data-framer-name="Box"] { display: none !important; }
 @keyframes knc-word-in {
   from { opacity: 0.22; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
