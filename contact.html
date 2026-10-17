@@ -1141,8 +1141,9 @@ a.framer-1sheavb[href="./contact.html"]:hover * {
 
 
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="/knc-theme.css?v=10">
-<script src="/knc-motion.js?v=7" defer></script>
+<link rel="stylesheet" href="/knc-theme.css?v=12">
+<script src="/knc-motion.js?v=8" defer></script>
+<script src="/knc-content.js?v=2" defer></script>
 </head>
 <body>
 <!--
@@ -1602,22 +1603,34 @@ window.addEventListener('load', () => {
       form.dataset.bound = "true";
       form.addEventListener("submit", function(e) {
         e.preventDefault();
-        const btn = document.getElementById("knc-submit-btn");
+        var fd = new FormData(form);
+        // Honeypot fields: real visitors never fill these in.
+        if ((fd.get("website") || "") !== "" || (fd.get("company") || "") !== "") return;
+        var labels = ["Full Name", "Company Name", "Business Email", "Country", "Dial Code", "Phone Number", "Inquiry Type", "Message / Requirement"];
+        var lines = [];
+        labels.forEach(function (k) {
+          var v = String(fd.get(k) || "").trim();
+          if (v) lines.push(k + ": " + v);
+        });
+        var type = String(fd.get("Inquiry Type") || "").trim();
+        var who = String(fd.get("Full Name") || "").trim();
+        var subject = "Website inquiry" + (type ? " - " + type : "") + (who ? " - " + who : "");
+        var btn = document.getElementById("knc-submit-btn");
+        // There is no mail server behind this static site, so the inquiry is handed to the
+        // visitor's own email app, addressed to KNC, ready to send.
+        window.location.href = "mailto:hello@knclogistics.com.sa?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(lines.join("\n"));
         if (btn) {
-          btn.disabled = true;
-          btn.textContent = "Thank you! Inquiry Received.";
-          btn.style.setProperty("background-color", "#16a34a", "important");
+          btn.textContent = "Your email app is opening — press send";
+          setTimeout(function () { btn.textContent = "Submit Inquiry"; }, 8000);
         }
-        setTimeout(function() {
-          form.reset();
-          selects.forEach(s => s.dispatchEvent(new Event("change")));
-          if (btn) {
-            btn.disabled = false;
-            btn.textContent = "Submit Inquiry";
-            btn.style.removeProperty("background-color");
-          }
-        }, 4000);
       });
+      if (!document.getElementById("knc-form-note")) {
+        var note = document.createElement("p");
+        note.id = "knc-form-note";
+        note.className = "knc-form-note";
+        note.textContent = "Submitting opens your email app with this inquiry addressed to hello@knclogistics.com.sa. If nothing opens, please email us directly.";
+        form.appendChild(note);
+      }
     }
   }
 

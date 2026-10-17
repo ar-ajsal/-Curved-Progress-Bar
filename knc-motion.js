@@ -191,28 +191,30 @@
   function buildHeroRoute() {
     // Freight route belongs on the home page and the service pages (road/freight imagery).
     if (!/^\/(index(\.html)?)?$|^\/services\/[^/]+\/?$|^\/services\/[^/]+\.html$/.test(location.pathname)) return;
-    var hero = q('[data-framer-name="Section: Hero"]');
-    if (!hero || q(".knc-route", hero)) return;
-    if (getComputedStyle(hero).position === "static") hero.style.position = "relative";
-    var path = "M -20 280 C 160 280, 210 170, 380 190 S 640 270, 800 170 S 1040 70, 1220 60";
-    var motion = reduced ? "" :
-      '<circle r="6" fill="#fff"><animateMotion dur="9s" repeatCount="indefinite" path="' + path + '"/></circle>' +
-      '<circle r="14" fill="#22b26b" opacity=".35"><animateMotion dur="9s" repeatCount="indefinite" path="' + path + '"/>' +
-      '<animate attributeName="r" values="8;18;8" dur="1.8s" repeatCount="indefinite"/></circle>';
-    var pins = [[380, 190, "#22b26b"], [800, 170, "#e8731a"], [1190, 60, "#0f8fd1"]].map(function (p, i) {
-      return '<g class="knc-pin" style="animation-delay:' + (1.1 + i * 0.5) + 's">' +
-        '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="14" fill="' + p[2] + '" opacity=".22"/>' +
-        '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="6" fill="' + p[2] + '" stroke="#fff" stroke-width="2"/></g>';
-    }).join("");
-    var el = svg(
-      '<svg viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" xmlns="' + NS + '">' +
-      '<path class="knc-route__base" d="' + path + '" fill="none"/>' +
-      '<path class="knc-route__flow" d="' + path + '" fill="none"/>' +
-      pins + motion + "</svg>",
-      "knc-route"
-    );
-    hero.appendChild(el);
-    whenReady(function () { el.classList.add("knc-in"); });
+    // The export keeps one hero per breakpoint (the others are display:none), so decorate all of them.
+    qa('[data-framer-name="Section: Hero"]').forEach(function (hero) {
+      if (q(".knc-route", hero)) return;
+      if (getComputedStyle(hero).position === "static") hero.style.position = "relative";
+      var path = "M -20 280 C 160 280, 210 170, 380 190 S 640 270, 800 170 S 1040 70, 1220 60";
+      var motion = reduced ? "" :
+        '<circle r="6" fill="#fff"><animateMotion dur="9s" repeatCount="indefinite" path="' + path + '"/></circle>' +
+        '<circle r="14" fill="#22b26b" opacity=".35"><animateMotion dur="9s" repeatCount="indefinite" path="' + path + '"/>' +
+        '<animate attributeName="r" values="8;18;8" dur="1.8s" repeatCount="indefinite"/></circle>';
+      var pins = [[380, 190, "#22b26b"], [800, 170, "#e8731a"], [1190, 60, "#0f8fd1"]].map(function (p, i) {
+        return '<g class="knc-pin" style="animation-delay:' + (1.1 + i * 0.5) + 's">' +
+          '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="14" fill="' + p[2] + '" opacity=".22"/>' +
+          '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="6" fill="' + p[2] + '" stroke="#fff" stroke-width="2"/></g>';
+      }).join("");
+      var el = svg(
+        '<svg viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" xmlns="' + NS + '">' +
+        '<path class="knc-route__base" d="' + path + '" fill="none"/>' +
+        '<path class="knc-route__flow" d="' + path + '" fill="none"/>' +
+        pins + motion + "</svg>",
+        "knc-route"
+      );
+      hero.appendChild(el);
+      whenReady(function () { el.classList.add("knc-in"); });
+    });
   }
 
   /* ------------------------------------------------------------------
