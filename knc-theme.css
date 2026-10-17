@@ -1,0 +1,700 @@
+/* ==========================================================================
+   KNC Logistics Services — design system overrides
+   --------------------------------------------------------------------------
+   Loaded on every page after the Framer export's own CSS. It re-themes the
+   site without touching the approved content:
+
+     1. Brand tokens   – the template's lime/near-black palette is replaced by
+                         colours taken from the KNC logo (navy, green, orange,
+                         blue, steel grey).
+     2. Typography     – one family, a real heading/body hierarchy, and
+                         paragraphs that no longer render as H1-sized text.
+     3. Surfaces       – hairline borders, a logo-bar accent and a dashed
+                         "road" divider on every section, navy footer band.
+     4. Motion hooks   – styles for the logistics animations in knc-motion.js.
+   ========================================================================== */
+
+:root {
+  --knc-navy: #000080;
+  --knc-ink: #0a1240;          /* deep navy used for text and dark surfaces */
+  --knc-green: #22b26b;
+  --knc-orange: #e8731a;
+  --knc-blue: #0f8fd1;
+  --knc-steel: #8a9bb5;
+  --knc-slate: #4b556b;        /* body copy */
+  --knc-mist: #eef2f8;         /* light surface */
+  --knc-line: #dde4f0;         /* hairlines */
+  --knc-bars: linear-gradient(
+    90deg,
+    var(--knc-green) 0 25%,
+    var(--knc-orange) 25% 50%,
+    var(--knc-steel) 50% 75%,
+    var(--knc-blue) 75% 100%
+  );
+  --knc-font: "Plus Jakarta Sans", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  --knc-ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------- 1. Brand tokens (Framer reads colours through these) ---------- */
+html body {
+  --token-2a4593a7-23b7-4868-b8cb-82fa07e43bf3: #0a1240;   /* dark surface */
+  --token-8669b887-9863-405f-937a-d94bb40227d5: #0a1240;   /* ink */
+  --token-f728664a-7a7b-4851-84ff-2344b5200642: #4b556b;   /* body text */
+  --token-ed0c273b-bd36-4078-846e-4604bb35423a: #4b556b;
+  --token-06017da3-1dbe-458d-8b71-93adc39e0c2a: #b9c2d8;   /* text on dark */
+  --token-bfbbfac1-ef8f-4141-8846-f2044a3be998: #c4cce0;
+  --token-49ab922f-ab61-4a59-b7f0-bcd493a839b7: #22b26b;   /* accent (was lime) */
+  --token-ac3b61b4-237a-4d33-94a0-e082c9be1b1f: #6b768c;
+  --token-870d86f3-cd8a-45ce-b694-252298dd5bb8: #8a94a8;
+  --token-ea1b1278-e5db-4787-8f8a-fb9dacc5fa07: #eef2f8;   /* light surface */
+}
+
+/* ---------- 2. Typography ---------- */
+html body,
+html body * {
+  font-family: var(--knc-font) !important;
+}
+
+html body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Hero: the only primary heading */
+html body [data-framer-name="Section: Hero"] h1 {
+  font-size: clamp(32px, 4.4vw, 60px) !important;
+  line-height: 1.06 !important;
+  letter-spacing: -0.025em !important;
+  font-weight: 700 !important;
+}
+
+/* Section headings (H2) */
+html body [data-framer-name^="Section:"] h2,
+html body [data-framer-name="CTA"] h2 {
+  font-size: clamp(26px, 3vw, 42px) !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.025em !important;
+  font-weight: 700 !important;
+}
+
+/* Long statements that were set as giant headings are body-lead paragraphs.
+   knc-motion.js marks them (class + role="paragraph"); the length-based
+   fallback selectors keep them right even before it runs. */
+html body .knc-lead.knc-lead {
+  font-size: clamp(19px, 1.85vw, 27px) !important;
+  line-height: 1.5 !important;
+  letter-spacing: -0.012em !important;
+  font-weight: 500 !important;
+}
+html body h2.knc-lead.knc-lead {
+  max-width: 44ch;
+}
+
+/* Section numbers / counts such as "(05)" */
+html body [data-framer-name="Section: Service"] p[class*="framer-text"]:not([data-framer-name]) {
+  letter-spacing: -0.02em;
+}
+html body .knc-count {
+  font-size: clamp(22px, 2.3vw, 32px) !important;
+  font-weight: 600 !important;
+  color: var(--knc-steel) !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* Stats and list titles that the export marks up as H1 / big paragraphs */
+html body .knc-stat {
+  font-size: clamp(30px, 3.3vw, 46px) !important;
+  line-height: 1.05 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.03em !important;
+  color: var(--knc-ink);
+}
+html body .knc-title-lg {
+  font-size: clamp(21px, 2.1vw, 30px) !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+}
+html body .knc-title-md {
+  font-size: clamp(19px, 1.6vw, 23px) !important;
+  line-height: 1.25 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.015em !important;
+}
+
+/* Sub-headings (H3/H4/H5) */
+html body [data-framer-name^="Section:"] h3 {
+  font-size: clamp(19px, 1.7vw, 24px) !important;
+  line-height: 1.25 !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.015em !important;
+}
+html body [data-framer-name="Section: FAQs"] h3 {
+  font-size: clamp(17px, 1.35vw, 20px) !important;
+  line-height: 1.35 !important;
+  font-weight: 600 !important;
+}
+html body [data-framer-name^="Section:"] h4 {
+  font-size: clamp(18px, 1.5vw, 21px) !important;
+  line-height: 1.3 !important;
+  font-weight: 650 !important;
+  letter-spacing: -0.012em !important;
+}
+html body [data-framer-name^="Section:"] h5 {
+  font-size: clamp(16px, 1.25vw, 18px) !important;
+  line-height: 1.35 !important;
+  font-weight: 650 !important;
+}
+
+/* Body copy: readable size, comfortable measure */
+html body [data-framer-name^="Section:"] p,
+html body [data-framer-name="CTA"] p {
+  line-height: 1.65;
+}
+html body [data-framer-name="Description"] p,
+html body [data-framer-name="Section: Who We Are"] > * p {
+  font-size: clamp(15px, 1.1vw, 17px) !important;
+  line-height: 1.7 !important;
+  font-weight: 400 !important;
+  max-width: 62ch;
+}
+
+/* Eyebrow labels */
+html body [data-framer-name="Sub title"] p,
+html body [data-framer-name="Sub Title"] p,
+html body [data-framer-name="Sub Text"] p,
+html body [data-framer-name="Sub"] p {
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.16em !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+}
+
+/* ---------- 3. Surfaces ---------- */
+html body [data-framer-name^="Section:"] {
+  position: relative;
+}
+
+/* Logo-bar accent + dashed "road" divider at the top of every section */
+html body [data-framer-name^="Section:"]:not([data-framer-name="Section: Hero"])::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: clamp(20px, 3vw, 44px);
+  width: 64px;
+  height: 4px;
+  background: var(--knc-bars);
+  border-radius: 0 0 3px 3px;
+  pointer-events: none;
+}
+html body [data-framer-name^="Section:"]:not([data-framer-name="Section: Hero"])::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: clamp(20px, 3vw, 44px);
+  right: clamp(20px, 3vw, 44px);
+  height: 1px;
+  background: repeating-linear-gradient(90deg, var(--knc-line) 0 9px, transparent 9px 18px);
+  background-size: 18px 1px;
+  animation: knc-road 1.6s linear infinite;
+  pointer-events: none;
+}
+@keyframes knc-road {
+  to { background-position: 18px 0; }
+}
+
+/* Cards: hairline border instead of flat blocks */
+html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] {
+  border: 1px solid var(--knc-line);
+  border-radius: 6px !important;
+}
+/* Primary buttons */
+html body a[data-framer-name*="utton"],
+html body a[data-framer-name="Contact"] {
+  transition: transform 0.35s var(--knc-ease), box-shadow 0.35s var(--knc-ease);
+}
+html body a[data-framer-name*="utton"]:hover,
+html body a[data-framer-name="Contact"]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 128, 0.45);
+}
+
+/* Footer: navy band with the logo-bar stripe, like a letterhead footer */
+html body footer {
+  position: relative;
+  background: linear-gradient(180deg, #0a1240 0%, #070d30 100%) !important;
+}
+html body footer::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--knc-bars);
+  pointer-events: none;
+}
+
+/* The export's text-replacement script hides the original with an inline
+   style that React keeps resetting; this attribute rule is the reliable hide. */
+[data-replaced="true"] {
+  display: none !important;
+}
+
+/* ---------- 4. Motion hooks (see knc-motion.js) ---------- */
+.knc-ghost {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Shipment tracker: a truck rides a road along the bottom of the viewport */
+.knc-tracker {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 22px;
+  z-index: 9990;
+  pointer-events: none;
+}
+.knc-tracker__road {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: rgba(10, 18, 64, 0.12);
+}
+.knc-tracker__fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--knc-bars);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+.knc-tracker__truck {
+  position: absolute;
+  left: 0;
+  bottom: 3px;
+  width: 30px;
+  height: 16px;
+  margin-left: -22px;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+.knc-tracker__truck svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+.knc-tracker__wheel {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: knc-spin 0.6s linear infinite;
+}
+@keyframes knc-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Decorative overlays that replace the card line-art */
+.knc-art {
+  position: absolute;
+  left: 8%;
+  bottom: 7%;
+  width: 54%;
+  max-width: 190px;
+  aspect-ratio: 1 / 1;
+  background: inherit;
+  z-index: 2;
+  pointer-events: none;
+}
+.knc-art svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Hero route overlay */
+.knc-route {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: min(46%, 360px);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.9;
+}
+.knc-route svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@media (max-width: 809px) {
+  .knc-route { height: 32%; opacity: 0.8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body [data-framer-name^="Section:"]::after {
+    animation: none;
+  }
+  .knc-tracker__wheel {
+    animation: none;
+  }
+}
+
+/* ---------- 5. Logistics animations ---------- */
+
+/* Hero route: dashed lane with waypoints and a moving shipment */
+.knc-route__base {
+  stroke: rgba(255, 255, 255, 0.28);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+.knc-route__flow {
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 2 14;
+  stroke-dashoffset: 0;
+  opacity: 0;
+}
+.knc-route.knc-in .knc-route__flow {
+  opacity: 1;
+  transition: opacity 0.8s ease 0.4s;
+  animation: knc-flow 1.4s linear infinite;
+}
+.knc-route.knc-in .knc-route__base {
+  stroke-dasharray: 1600;
+  stroke-dashoffset: 1600;
+  animation: knc-draw 2.4s var(--knc-ease) 0.2s forwards;
+}
+.knc-pin {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.knc-route.knc-in .knc-pin {
+  animation: knc-pin-in 0.7s var(--knc-ease) both;
+}
+@keyframes knc-flow { to { stroke-dashoffset: -16; } }
+@keyframes knc-draw { to { stroke-dashoffset: 0; } }
+@keyframes knc-pin-in {
+  from { opacity: 0; transform: scale(0.2); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Optimized Supply Chain: pallets stack */
+.knc-stack {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: knc-stack 3.2s ease-in-out infinite;
+}
+@keyframes knc-stack {
+  0%, 100% { transform: translateY(0); }
+  45%      { transform: translateY(-6px); }
+}
+.knc-blip { animation: knc-blip 1.8s ease-in-out infinite; }
+@keyframes knc-blip {
+  0%, 100% { opacity: 0.3; transform: translateY(0); }
+  50%      { opacity: 1; transform: translateY(-3px); }
+}
+
+/* End to End Visibility: tracking pings */
+.knc-ping {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: knc-ping 2.4s ease-out infinite;
+  opacity: 0;
+}
+@keyframes knc-ping {
+  0%   { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(3); opacity: 0; }
+}
+
+/* Scalable Distribution: parcels travelling from the hub */
+.knc-flow { animation: knc-dashmove 1.2s linear infinite; }
+@keyframes knc-dashmove { to { stroke-dashoffset: -18; } }
+.knc-dot {
+  animation: knc-dot 2.2s ease-in-out infinite;
+  opacity: 0;
+}
+@keyframes knc-dot {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translate(var(--x), var(--y)); opacity: 0; }
+}
+
+/* Predictive Routing: the route is drawn, then re-planned */
+.knc-route-draw {
+  stroke-dasharray: 160;
+  stroke-dashoffset: 160;
+  animation: knc-route-draw 3.6s ease-in-out infinite;
+}
+@keyframes knc-route-draw {
+  0%        { stroke-dashoffset: 160; }
+  55%, 85%  { stroke-dashoffset: 0; }
+  100%      { stroke-dashoffset: -160; }
+}
+
+/* How-we-work step titles: accent bar draws in when the step is seen */
+html body h3.knc-step::after {
+  content: "";
+  display: block;
+  height: 3px;
+  width: 0;
+  margin-top: 12px;
+  background: var(--knc-bars);
+  border-radius: 2px;
+  transition: width 0.9s var(--knc-ease);
+}
+html body h3.knc-step.knc-seen::after {
+  width: 56px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knc-route.knc-in .knc-route__flow,
+  .knc-route.knc-in .knc-route__base,
+  .knc-route.knc-in .knc-pin,
+  .knc-stack,
+  .knc-blip,
+  .knc-ping,
+  .knc-flow,
+  .knc-dot,
+  .knc-route-draw {
+    animation: none !important;
+  }
+  .knc-route__base { stroke-dasharray: none; stroke-dashoffset: 0; }
+  .knc-route .knc-pin { opacity: 1; }
+  .knc-dot { opacity: 1; }
+  .knc-route-draw { stroke-dashoffset: 0; }
+  html body h3.knc-step::after { transition: none; width: 56px; }
+}
+
+/* Eyebrow markers: the template's lime square becomes the logo's four bars */
+html body .framer-198tmfh {
+  background: var(--knc-bars) !important;
+  background-color: transparent !important;
+  border-radius: 1px;
+}
+
+/* Word spacing: the template's tight tracking was tuned for Arial and makes
+   Plus Jakarta Sans words run together. */
+html body p,
+html body li,
+html body a {
+  letter-spacing: -0.003em;
+  word-spacing: 0.1em;
+}
+html body h1,
+html body h2,
+html body h3,
+html body h4,
+html body h5,
+html body .knc-lead,
+html body .knc-stat,
+html body .knc-title-lg,
+html body .knc-title-md {
+  word-spacing: 0.12em;
+}
+html body [data-framer-name="Section: Hero"] h1 {
+  letter-spacing: -0.012em !important;
+}
+html body [data-framer-name^="Section:"] h2,
+html body [data-framer-name="CTA"] h2 {
+  letter-spacing: -0.018em !important;
+}
+
+/* The hero's second line is built from nested spans with their own size and
+   weight; make every line of the primary heading match. */
+html body [data-framer-name="Section: Hero"] h1 *,
+html body [data-framer-name^="Section:"] h2 .framer-text {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+}
+
+html body p.knc-display {
+  font-size: clamp(52px, 6.4vw, 92px) !important;
+  line-height: 1 !important;
+  letter-spacing: -0.04em !important;
+}
+
+/* Template icons are lime SVG images; rotate their hue onto the brand green.
+   White and near-black artwork has no hue, so it is unaffected. */
+html body img[src*=".svg"] {
+  filter: hue-rotate(72deg) saturate(0.85) brightness(0.9);
+}
+html body p.knc-on-green {
+  color: #06143a !important;
+}
+
+/* ---------- 6. Content audit (source of truth: KNC Corporate Profile) ----------
+   Sections whose claims are not supported by the profile. See CONTENT_AUDIT.md. */
+html body [data-framer-name="Stats"],                                   /* 1.2M+ miles, 98% on-time, 24/7 */
+html body [data-framer-name="Section: Who We Are"],                     /* 145,000 shipments, fleet specs */
+html body [data-framer-name="Section: Insights"],                       /* sample blog articles */
+html body [data-framer-name="Section: Recognition & Impact"],           /* shipment / client / truck counts */
+html body [data-framer-name="Section: Supported"],                      /* "backers" and "leading businesses" */
+html body [data-framer-name="Section: Problem"] [data-framer-name="Highlight"],  /* 90% statistic */
+html body [data-framer-name="Section: Data"] [data-framer-name="Block"],         /* per-service performance metrics */
+html body footer [data-framer-name="Social"],                           /* links to unrelated accounts */
+html body [data-knc-replaced="true"] {
+  display: none !important;
+}
+
+/* Statements rewritten from the profile (replace the word-reveal components) */
+html body p.knc-statement {
+  margin: 0;
+  width: 100%;
+  max-width: 62ch;
+  margin-inline: auto;
+  font-weight: 500;
+}
+html body p.knc-statement .kw {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0.22;
+  transform: translateY(6px);
+}
+html body p.knc-statement.knc-in .kw {
+  animation: knc-word-in 0.5s var(--knc-ease) both;
+  animation-delay: calc(var(--wi, 0) * 24ms);
+}
+@keyframes knc-word-in {
+  from { opacity: 0.22; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body p.knc-statement .kw { opacity: 1; transform: none; animation: none !important; }
+}
+
+/* Footer contact column uses the freed width (no wrapped e-mail address) */
+html body footer [data-framer-name="Right"] [data-framer-name="Contact"] {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+}
+html body footer [data-framer-name="Contact"] p,
+html body footer [data-framer-name="Contact"] a {
+  overflow-wrap: anywhere;
+}
+
+.knc-form-note {
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--knc-slate);
+}
+
+/* Staggered reveal used by knc-motion.js when a per-letter heading is in view but still faint */
+html body .knc-force-reveal span[style*="inline-block"] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: opacity 0.5s ease calc(var(--ki, 0) * 14ms), transform 0.6s var(--knc-ease) calc(var(--ki, 0) * 14ms);
+}
+
+/* ---------- 7. Accessibility ---------- */
+/* Visible keyboard focus everywhere (the export removes outlines); a light inner ring keeps it readable on dark sections. */
+html body :focus-visible {
+  outline: 3px solid var(--knc-blue) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.85) !important;
+  border-radius: 4px;
+}
+html body input:focus-visible,
+html body select:focus-visible,
+html body textarea:focus-visible {
+  outline-offset: 1px !important;
+  box-shadow: none !important;
+}
+
+/* Skip link: first tab stop, visible only when focused */
+.knc-skip {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 2147483001;
+  transform: translateY(-160%);
+  padding: 12px 18px;
+  border-radius: 8px;
+  background: var(--knc-ink);
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  transition: transform 0.2s var(--knc-ease);
+}
+.knc-skip:focus,
+.knc-skip:focus-visible {
+  transform: translateY(0);
+}
+#knc-main:focus,
+[data-framer-name="Section: Hero"]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* ---------- 8. Hero fallback ----------
+   The template's own hero photo (a third-party branded truck) must never show, and the
+   hero should already look right while the video buffers: a still from the video sits under it. */
+html body #hero .framer-123a0tk {
+  display: none !important;
+}
+html body #hero {
+  background-color: #0d1a24 !important;
+  background-image: url("/hero-poster-desktop.jpg") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+}
+@media (max-width: 809.98px) {
+  html body #hero {
+    background-image: url("/hero-poster-mobile.jpg") !important;
+    background-position: 62% center !important;
+  }
+}
+
+/* Reveal guarantee for elements the export tags for a scroll-in animation (see knc-motion.js) */
+html body .knc-force-appear {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: opacity 0.5s ease, transform 0.6s var(--knc-ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  html body .knc-force-appear, html body .knc-force-reveal span[style*="inline-block"] { transition: none; }
+}
+
+/* The template's own loading curtain is replaced by knc-loader; a later rule in the export forces it
+   back on (display:flex !important), so it is hidden here with higher specificity. */
+html body .framer-1gdz00r-container {
+  display: none !important;
+}
+
+/* The header logo link has no box of its own (its image is absolutely positioned), so draw the focus ring on the image */
+html body a:has(.knc-logo-img):focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+html body a:has(.knc-logo-img):focus-visible .knc-logo-img {
+  outline: 3px solid var(--knc-blue);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Reduced motion: the dashed road divider stops moving (needs the same specificity as the rule it overrides) */
+@media (prefers-reduced-motion: reduce) {
+  html body [data-framer-name^="Section:"]:not([data-framer-name="Section: Hero"])::after {
+    animation: none !important;
+  }
+}
