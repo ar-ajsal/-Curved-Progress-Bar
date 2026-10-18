@@ -422,6 +422,17 @@ html body [data-framer-name="Section: Solution"] p.knc-statement {
   html body [data-framer-name="Section: Story"] { background-color: var(--knc-ink) !important; }
 }
 
+/* Inner pages: page titles and service-list titles use the same scale as the home page */
+html:not(.knc-home) body [data-framer-name="Section: Hero"] h1.framer-styles-preset-qyefr5 {
+  font-size: clamp(30px, 3.2vw, 48px) !important;
+  line-height: 1.1 !important;
+}
+html:not(.knc-home) body [data-framer-name="Section: Hero"] h1.framer-styles-preset-33n0k0 {
+  font-size: clamp(21px, 2.1vw, 30px) !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+}
+
 /* Hero route overlay */
 .knc-route {
   position: absolute;

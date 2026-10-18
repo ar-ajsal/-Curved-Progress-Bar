@@ -15,6 +15,12 @@
 (function () {
   "use strict";
 
+  // Mark the home page so inner pages can use a calmer title scale (see knc-theme.css)
+  (function () {
+    var path = location.pathname.replace(/\/+$/, "");
+    if (path === "" || path === "/index" || path === "/index.html") document.documentElement.classList.add("knc-home");
+  })();
+
   function norm(s) { return (s || "").replace(/\s+/g, " ").trim(); }
   function strip(s) { return (s || "").replace(/\s+/g, ""); }
   function qa(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
