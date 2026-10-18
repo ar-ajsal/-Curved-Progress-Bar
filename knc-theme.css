@@ -353,19 +353,26 @@ html body [data-framer-name="Section: Solution"] [data-framer-name="Blank space"
 html body [data-framer-name="Section: Solution"] [data-framer-name="Main Solution"] { order: 0; }
 html body [data-framer-name="Section: Solution"] [data-framer-name="Background sticky"] {
   order: 1;
-  position: relative !important;
-  top: auto !important;
-  height: clamp(220px, 34vw, 480px) !important;
+  position: sticky !important;   /* the truck image stays pinned while the statement panel slides over it */
+  top: 0 !important;
+  z-index: 1;
+  height: clamp(340px, 62vh, 620px) !important;
   overflow: hidden !important;
 }
 html body [data-framer-name="Section: Solution"] [data-framer-name="Text title reveal"] {
   order: 2;
   position: relative !important;
+  z-index: 3;                    /* covers the pinned image as it scrolls up */
   inset: auto !important;
   transform: none !important;
   height: auto !important;
-  min-height: 0 !important;
+  min-height: max(66vh, 420px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   padding: clamp(56px, 8vw, 120px) 0 !important;
+  background-color: #fff !important;
+  box-shadow: 0 -24px 48px -28px rgba(7, 18, 58, 0.45);
 }
 html body [data-framer-name="Section: Solution"] [data-framer-name="Text title reveal"] [data-framer-name="Square Frame"] {
   height: auto !important;
