@@ -211,6 +211,19 @@ html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] 
   border: 1px solid var(--knc-line);
   border-radius: 6px !important;
 }
+/* Solution cards in the logo palette: green, orange, navy, blue */
+html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] { border-color: transparent; }
+html body [data-framer-name="Section: Solution"] .framer-1pm73ja-container > [data-framer-name="Variant 1"] { background-color: var(--knc-green) !important; --knc-card-ink: #07123a; }
+html body [data-framer-name="Section: Solution"] .framer-15s61ba-container > [data-framer-name="Variant 1"] { background-color: var(--knc-orange) !important; --knc-card-ink: #07123a; }
+html body [data-framer-name="Section: Solution"] .framer-1x8nkrb-container > [data-framer-name="Variant 1"] { background-color: var(--knc-ink) !important; --knc-card-ink: #ffffff; }
+html body [data-framer-name="Section: Solution"] .framer-1xaul4x-container > [data-framer-name="Variant 1"] { background-color: var(--knc-blue) !important; --knc-card-ink: #07123a; }
+html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] :is(h2, h3, h4, p) {
+  color: var(--knc-card-ink) !important;
+  --framer-text-color: var(--knc-card-ink) !important;
+}
+html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] .knc-art { background: transparent; }
+html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] p { opacity: 1 !important; }
+
 /* Primary buttons */
 html body a[data-framer-name*="utton"],
 html body a[data-framer-name="Contact"] {
@@ -323,6 +336,68 @@ html body footer::before {
   display: block;
   overflow: visible;
 }
+
+/* The template's own line-art (text-free container) is hidden outright, so no part of it can peek out beside the KNC overlay */
+html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] > div[class*="-container"]:not(.knc-art) {
+  visibility: hidden !important;
+}
+
+/* Solution section: the template used a 900px spacer + sticky layers for its scroll-driven word reveal.
+   The statement now reveals on its own, so the spacer is dropped and the layers flow normally (no dead white space). */
+html body [data-framer-name="Section: Solution"] [data-framer-name="Container"].framer-1skzdlm {
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+html body [data-framer-name="Section: Solution"] [data-framer-name="Blank space"] { display: none !important; }
+html body [data-framer-name="Section: Solution"] [data-framer-name="Main Solution"] { order: 0; }
+html body [data-framer-name="Section: Solution"] [data-framer-name="Background sticky"] {
+  order: 1;
+  position: relative !important;
+  top: auto !important;
+  height: clamp(220px, 34vw, 480px) !important;
+  overflow: hidden !important;
+}
+html body [data-framer-name="Section: Solution"] [data-framer-name="Text title reveal"] {
+  order: 2;
+  position: relative !important;
+  inset: auto !important;
+  transform: none !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: clamp(56px, 8vw, 120px) 0 !important;
+}
+html body [data-framer-name="Section: Solution"] [data-framer-name="Text title reveal"] [data-framer-name="Square Frame"] {
+  height: auto !important;
+  aspect-ratio: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  padding: 0 24px !important;
+}
+html body [data-framer-name="Section: Solution"] [data-framer-name="Text title reveal"] [class*="-container"]:not(:has(.knc-statement)) {
+  position: absolute !important;
+}
+
+/* Solutions: same statement block (Section: Introduction) */
+html body [data-framer-name="Section: Introduction"] > [data-framer-name="Container"] { height: auto !important; min-height: 0 !important; }
+html body [data-framer-name="Section: Introduction"] [data-framer-name="Text title reveal"] {
+  position: relative !important;
+  inset: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: clamp(56px, 8vw, 120px) 0 !important;
+}
+html body [data-framer-name="Section: Introduction"] [data-framer-name="Square Frame"] {
+  height: auto !important;
+  aspect-ratio: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  padding: 0 24px !important;
+}
+html body [data-framer-name="Section: Introduction"] [data-framer-name="Square Frame"] > [data-framer-name="Box"] { display: none !important; }
+html body [data-framer-name="Section: Introduction"] [data-framer-name="Square Frame"] [class*="-container"]:not(:has(.knc-statement)) { position: absolute !important; }
+html body [data-framer-name="Section: Introduction"] p.knc-statement,
+html body [data-framer-name="Section: Introduction"] p.knc-statement .kw { color: var(--knc-navy, #000080) !important; }
 
 /* Hero route overlay */
 .knc-route {
@@ -572,6 +647,10 @@ html body p.knc-statement.knc-in .kw {
   animation: knc-word-in 0.5s var(--knc-ease) both;
   animation-delay: calc(var(--wi, 0) * 24ms);
 }
+/* Light sections: the template's pale statement colour is unreadable on white; the empty "Box" squares only collide with the text */
+html body [data-framer-name="Section: Solution"] p.knc-statement { color: var(--knc-navy, #0a1450) !important; }
+html body [data-framer-name="Section: Solution"] p.knc-statement .kw { color: inherit !important; }
+html body [data-framer-name="Section: Solution"] [data-framer-name="Square Frame"] > [data-framer-name="Box"] { display: none !important; }
 @keyframes knc-word-in {
   from { opacity: 0.22; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }

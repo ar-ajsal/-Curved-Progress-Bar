@@ -107,12 +107,15 @@
     "Whether you are a startup or an enterprise, our flexible solutions grow with your business, adapting to your changing market needs.":
       "A strong vendor and subcontractor network and project logistics capability to match the right resources to every job.",
 
-    // Legal pages
+    // Legal pages. The governing-law clause named Singapore (template text); removed until KNC's legal adviser supplies it.
+    "6. GOVERNING LAW AND DISPUTE RESOLUTION": "",
+    "7. AMENDMENTS": "6. AMENDMENTS",
     "Our Terms Cookie": "Our Terms"
   };
 
   /* ---------------- 2. Pattern clean-ups (regex on a text node's value) ---------------- */
   var PATTERNS = [
+    [/^\s*These Terms shall be governed by and construed in accordance with the laws of Singapore[^]*$/, ""],
     // Template typos
     [/^(\s*)We delivers\b/, "$1We deliver"],
     // Legal pages: text pasted from an unrelated job advertisement and layout notes
@@ -280,6 +283,31 @@
   /* ---------------- 5. Links ---------------- */
   var MAPS = "https://www.google.com/maps/search/?api=1&query=Riyadh%2C%20Saudi%20Arabia";
   function fixLinks() {
+    qa('a[data-framer-name="Logo"]').forEach(function (a) {
+      if (a.getAttribute("href") !== "/") a.setAttribute("href", "/");
+    });
+    // Template links with no KNC page behind them
+    qa("nav a, header a, footer a").forEach(function (a) {
+      if (/^\s*(Investors?|Careers?|Blog)\s*$/i.test(a.textContent || "")) {
+        var box = a.closest("li") || a;
+        box.style.setProperty("display", "none", "important");
+      }
+    });
+    // Desktop navbar: add a "Home" link before Services (the mobile menu already has one)
+    qa('nav[data-framer-name="Menu item"]').forEach(function (nav) {
+      if (nav.querySelector("[data-knc-home]")) return;
+      var first = nav.firstElementChild;
+      if (!first || !first.querySelector("a")) return;
+      var clone = first.cloneNode(true);
+      clone.setAttribute("data-knc-home", "1");
+      var a = clone.querySelector("a");
+      a.setAttribute("href", "/");
+      var path = location.pathname.replace(/\/+$/, "");
+      if (path === "" || path === "/index" || path === "/index.html") a.setAttribute("aria-current", "page");
+      var t = clone.querySelector("p");
+      if (t) t.textContent = "Home";
+      nav.insertBefore(clone, first);
+    });
     qa('a[href^="tel:"]').forEach(function (a) {
       if (a.getAttribute("href") !== "tel:+966502746895") a.setAttribute("href", "tel:+966502746895");
     });
