@@ -406,6 +406,16 @@ html body [data-framer-name="Section: Introduction"] [data-framer-name="Square F
 html body [data-framer-name="Section: Introduction"] p.knc-statement,
 html body [data-framer-name="Section: Introduction"] p.knc-statement .kw { color: var(--knc-navy, #000080) !important; }
 
+/* Home statement panel: large display text, like the original cover section */
+html body [data-framer-name="Section: Solution"] p.knc-statement {
+  font-size: clamp(26px, 3.7vw, 56px) !important;
+  line-height: 1.16 !important;
+  letter-spacing: -0.02em;
+  font-weight: 600 !important;
+  max-width: min(22em, 100%) !important;
+  text-wrap: balance;
+}
+
 /* Hero route overlay */
 .knc-route {
   position: absolute;
