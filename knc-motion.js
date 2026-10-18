@@ -302,6 +302,34 @@
       '<circle cx="24" cy="96" r="5.5" fill="' + a + '"/><circle cx="96" cy="24" r="5.5" fill="' + a + '"/></svg>';
   }
 
+  /* ------------------------------------------------------------------
+     Statement word reveal, scrubbed by scroll (words light up as the block crosses the screen)
+     ------------------------------------------------------------------ */
+  var scrubQueued = false;
+  function scrubStatements() {
+    scrubQueued = false;
+    if (reduced) return;
+    var vh = window.innerHeight || 800;
+    qa("p.knc-statement").forEach(function (p) {
+      var words = p.querySelectorAll(".kw");
+      if (!words.length) return;
+      if (!p.classList.contains("knc-scrub")) p.classList.add("knc-scrub");
+      var r = p.getBoundingClientRect();
+      // 0 when the block's top enters at 92% of the viewport, 1 when its bottom reaches 55%
+      var start = vh * 0.92, end = vh * 0.55 - r.height;
+      var prog = (start - r.top) / Math.max(1, start - end);
+      prog = Math.max(0, Math.min(1, prog));
+      var n = words.length;
+      for (var i = 0; i < n; i++) {
+        var v = Math.max(0, Math.min(1, prog * (n + 4) - i));
+        var w = words[i];
+        w.style.opacity = (0.16 + 0.84 * v).toFixed(3);
+        w.style.transform = "translateY(" + ((1 - v) * 8).toFixed(1) + "px)";
+      }
+    });
+  }
+  function queueScrub() { if (!scrubQueued) { scrubQueued = true; requestAnimationFrame(scrubStatements); } }
+
   function buildCardArt() {
     var cards = qa('[data-framer-name="Section: Solution"] [data-framer-name="Variant 1"]').filter(visible);
     cards.forEach(function (card, i) {
@@ -494,6 +522,7 @@
     prepareStats();
     buildHeroRoute();
     buildCardArt();
+    queueScrub();
     watchLetterHeadings();
     watchAppear();
   }
@@ -512,6 +541,7 @@
     buildTracker();
     refresh();
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", queueScrub, { passive: true });
     window.addEventListener("resize", function () { onScroll(); schedule(); });
     new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true });
   }

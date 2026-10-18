@@ -655,6 +655,7 @@ html body [data-framer-name="Section: Solution"] [data-framer-name="Square Frame
   from { opacity: 0.22; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+html body p.knc-statement.knc-scrub .kw { animation: none !important; will-change: opacity, transform; }
 @media (prefers-reduced-motion: reduce) {
   html body p.knc-statement .kw { opacity: 1; transform: none; animation: none !important; }
 }
