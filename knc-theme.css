@@ -353,19 +353,26 @@ html body [data-framer-name="Section: Solution"] [data-framer-name="Blank space"
 html body [data-framer-name="Section: Solution"] [data-framer-name="Main Solution"] { order: 0; }
 html body [data-framer-name="Section: Solution"] [data-framer-name="Background sticky"] {
   order: 1;
-  position: relative !important;
-  top: auto !important;
-  height: clamp(220px, 34vw, 480px) !important;
+  position: sticky !important;   /* the truck image stays pinned while the statement panel slides over it */
+  top: 0 !important;
+  z-index: 1;
+  height: clamp(340px, 62vh, 620px) !important;
   overflow: hidden !important;
 }
 html body [data-framer-name="Section: Solution"] [data-framer-name="Text title reveal"] {
   order: 2;
   position: relative !important;
+  z-index: 3;                    /* covers the pinned image as it scrolls up */
   inset: auto !important;
   transform: none !important;
   height: auto !important;
-  min-height: 0 !important;
+  min-height: max(66vh, 420px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   padding: clamp(56px, 8vw, 120px) 0 !important;
+  background-color: #fff !important;
+  box-shadow: 0 -24px 48px -28px rgba(7, 18, 58, 0.45);
 }
 html body [data-framer-name="Section: Solution"] [data-framer-name="Text title reveal"] [data-framer-name="Square Frame"] {
   height: auto !important;
@@ -398,6 +405,16 @@ html body [data-framer-name="Section: Introduction"] [data-framer-name="Square F
 html body [data-framer-name="Section: Introduction"] [data-framer-name="Square Frame"] [class*="-container"]:not(:has(.knc-statement)) { position: absolute !important; }
 html body [data-framer-name="Section: Introduction"] p.knc-statement,
 html body [data-framer-name="Section: Introduction"] p.knc-statement .kw { color: var(--knc-navy, #000080) !important; }
+
+/* Home statement panel: large display text, like the original cover section */
+html body [data-framer-name="Section: Solution"] p.knc-statement {
+  font-size: clamp(26px, 3.7vw, 56px) !important;
+  line-height: 1.16 !important;
+  letter-spacing: -0.02em;
+  font-weight: 600 !important;
+  max-width: min(22em, 100%) !important;
+  text-wrap: balance;
+}
 
 /* Hero route overlay */
 .knc-route {
@@ -655,6 +672,7 @@ html body [data-framer-name="Section: Solution"] [data-framer-name="Square Frame
   from { opacity: 0.22; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+html body p.knc-statement.knc-scrub .kw { animation: none !important; will-change: opacity, transform; }
 @media (prefers-reduced-motion: reduce) {
   html body p.knc-statement .kw { opacity: 1; transform: none; animation: none !important; }
 }
