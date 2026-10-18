@@ -296,6 +296,9 @@
     // Desktop navbar: add a "Home" link before Services (the mobile menu already has one)
     qa('nav[data-framer-name="Menu item"]').forEach(function (nav) {
       if (nav.querySelector("[data-knc-home]")) return;
+      // the mobile menu already ships its own Home link
+      var hasHome = qa("a", nav).some(function (l) { return /^\s*Home\s*$/i.test(l.textContent || ""); });
+      if (hasHome) return;
       var first = nav.firstElementChild;
       if (!first || !first.querySelector("a")) return;
       var clone = first.cloneNode(true);
