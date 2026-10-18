@@ -433,6 +433,9 @@ html:not(.knc-home) body [data-framer-name="Section: Hero"] h1.framer-styles-pre
   font-weight: 600 !important;
 }
 
+/* Home hero: the template's two grid lines (vertical + horizontal) are decoration only */
+html.knc-home body [data-framer-name="Section: Hero"] [data-framer-name="Line"] { display: none !important; }
+
 /* Hero route overlay */
 .knc-route {
   position: absolute;
