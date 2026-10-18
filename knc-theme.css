@@ -213,10 +213,10 @@ html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] 
 }
 /* Solution cards in the logo palette: green, orange, navy, blue */
 html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] { border-color: transparent; }
-html body [data-framer-name="Section: Solution"] .framer-1pm73ja-container > [data-framer-name="Variant 1"] { background-color: var(--knc-green) !important; --knc-card-ink: #07123a; }
-html body [data-framer-name="Section: Solution"] .framer-15s61ba-container > [data-framer-name="Variant 1"] { background-color: var(--knc-orange) !important; --knc-card-ink: #07123a; }
-html body [data-framer-name="Section: Solution"] .framer-1x8nkrb-container > [data-framer-name="Variant 1"] { background-color: var(--knc-ink) !important; --knc-card-ink: #ffffff; }
-html body [data-framer-name="Section: Solution"] .framer-1xaul4x-container > [data-framer-name="Variant 1"] { background-color: var(--knc-blue) !important; --knc-card-ink: #07123a; }
+html body [data-framer-name="Section: Solution"] div[class*="-container"]:nth-child(1) > [data-framer-name="Variant 1"] { background-color: var(--knc-green) !important; --knc-card-ink: #07123a; }
+html body [data-framer-name="Section: Solution"] div[class*="-container"]:nth-child(2) > [data-framer-name="Variant 1"] { background-color: var(--knc-orange) !important; --knc-card-ink: #07123a; }
+html body [data-framer-name="Section: Solution"] div[class*="-container"]:nth-child(3) > [data-framer-name="Variant 1"] { background-color: var(--knc-ink) !important; --knc-card-ink: #ffffff; }
+html body [data-framer-name="Section: Solution"] div[class*="-container"]:nth-child(4) > [data-framer-name="Variant 1"] { background-color: var(--knc-blue) !important; --knc-card-ink: #07123a; }
 html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] :is(h2, h3, h4, p) {
   color: var(--knc-card-ink) !important;
   --framer-text-color: var(--knc-card-ink) !important;
@@ -407,6 +407,7 @@ html body [data-framer-name="Section: Introduction"] p.knc-statement,
 html body [data-framer-name="Section: Introduction"] p.knc-statement .kw { color: var(--knc-navy, #000080) !important; }
 
 /* Home statement panel: large display text, like the original cover section */
+html body [data-framer-name="Section: Introduction"] p.knc-statement,
 html body [data-framer-name="Section: Solution"] p.knc-statement {
   font-size: clamp(26px, 3.7vw, 56px) !important;
   line-height: 1.16 !important;
@@ -414,6 +415,11 @@ html body [data-framer-name="Section: Solution"] p.knc-statement {
   font-weight: 600 !important;
   max-width: min(22em, 100%) !important;
   text-wrap: balance;
+}
+
+/* About: on phones the navy layer starts mid-way down the first card, leaving light text on white */
+@media (max-width: 809px) {
+  html body [data-framer-name="Section: Story"] { background-color: var(--knc-ink) !important; }
 }
 
 /* Hero route overlay */
