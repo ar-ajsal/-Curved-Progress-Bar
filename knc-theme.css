@@ -436,6 +436,10 @@ html:not(.knc-home) body [data-framer-name="Section: Hero"] h1.framer-styles-pre
 /* Home hero: the template's two grid lines (vertical + horizontal) are decoration only */
 html.knc-home body [data-framer-name="Section: Hero"] [data-framer-name="Line"] { display: none !important; }
 
+/* Contact page: the header "Contact us" button points at the page you are already on */
+html.knc-contact body header a[href*="contact"],
+html.knc-contact body header [class*="g3klem-container"] { display: none !important; }
+
 /* Hero route overlay */
 .knc-route {
   position: absolute;
