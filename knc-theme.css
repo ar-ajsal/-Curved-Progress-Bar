@@ -211,6 +211,19 @@ html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] 
   border: 1px solid var(--knc-line);
   border-radius: 6px !important;
 }
+/* Solution cards in the logo palette: green, orange, navy, blue */
+html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] { border-color: transparent; }
+html body [data-framer-name="Section: Solution"] .framer-1pm73ja-container > [data-framer-name="Variant 1"] { background-color: var(--knc-green) !important; --knc-card-ink: #07123a; }
+html body [data-framer-name="Section: Solution"] .framer-15s61ba-container > [data-framer-name="Variant 1"] { background-color: var(--knc-orange) !important; --knc-card-ink: #07123a; }
+html body [data-framer-name="Section: Solution"] .framer-1x8nkrb-container > [data-framer-name="Variant 1"] { background-color: var(--knc-ink) !important; --knc-card-ink: #ffffff; }
+html body [data-framer-name="Section: Solution"] .framer-1xaul4x-container > [data-framer-name="Variant 1"] { background-color: var(--knc-blue) !important; --knc-card-ink: #07123a; }
+html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] :is(h2, h3, h4, p) {
+  color: var(--knc-card-ink) !important;
+  --framer-text-color: var(--knc-card-ink) !important;
+}
+html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] .knc-art { background: transparent; }
+html body [data-framer-name="Section: Solution"] [data-framer-name="Variant 1"] p { opacity: 1 !important; }
+
 /* Primary buttons */
 html body a[data-framer-name*="utton"],
 html body a[data-framer-name="Contact"] {

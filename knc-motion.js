@@ -260,8 +260,9 @@
      4. Solution cards: supply-chain animations instead of static line-art
      ------------------------------------------------------------------ */
   function artFor(i, dark) {
-    var s = dark ? "#ffffff" : "#0a1240";
-    var a = dark ? "#22b26b" : "#000080";
+    // card colours follow the logo palette: green, orange, navy, blue (see knc-theme.css)
+    var s = dark ? "#ffffff" : "#07123a";
+    var a = dark ? "#22b26b" : "#ffffff";
     if (i === 0) { // Optimized Supply Chain: pallets stacking up
       var layers = "";
       for (var k = 0; k < 6; k++) {
