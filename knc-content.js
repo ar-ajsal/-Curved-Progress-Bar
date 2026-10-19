@@ -19,6 +19,7 @@
   (function () {
     var path = location.pathname.replace(/\/+$/, "");
     if (path === "" || path === "/index" || path === "/index.html") document.documentElement.classList.add("knc-home");
+    if (/^\/contact(\.html)?$/.test(path)) document.documentElement.classList.add("knc-contact");
   })();
 
   function norm(s) { return (s || "").replace(/\s+/g, " ").trim(); }
