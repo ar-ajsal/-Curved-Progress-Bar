@@ -28,6 +28,8 @@
 
   /* ---------------- 1. Exact text replacements (normalised text -> new text) ---------------- */
   var EXACT = {
+    "We deliver a smarter, faster, and more reliable way to move goods. Combining modern trucking, optimized routing, and real-time visibility across every shipment.":
+      "We deliver a smarter, faster, and more reliable way to move global freight. Combining multi-modal transport, optimized routing, and real-time visibility across every shipment.",
     // Home
     "Gain absolute peace of mind with 24/7 real-time tracking, providing full transparency from the moment of pickup to the final destination.":
       "Gain peace of mind with visibility at every stage, providing full transparency from the moment of pickup to the final destination.",

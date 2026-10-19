@@ -116,3 +116,10 @@ launch: a form service or serverless endpoint.
 
 Known limitation: copy lives in Framer's hosted bundle, so some headings are re-rendered at hydration; a runtime
 pass keeps the outline correct, but the Framer project itself should be updated if it is kept as the source.
+
+### Client-supplied wording not covered by the corporate profile
+* Home hero sub-line, supplied by the site owner: "We deliver a smarter, faster, and more reliable way to move global
+  freight. Combining multi-modal transport, optimized routing, and real-time visibility across every shipment."
+  "Global freight" and "multi-modal transport" are not stated in the profile (it lists freight forwarding, customs
+  clearance, inland and cross-border transport, project logistics, rental, event logistics, 4PL and SABER services);
+  confirm KNC can stand behind them.
