@@ -484,6 +484,10 @@ html body ul.knc-facts { display: none; }
   }
 }
 
+/* Footer: the template's oversized "KNC LOGISTICS" watermark (SVG text) is removed in every footer layout */
+html body footer svg:has(foreignObject),
+html body footer div:has(> svg > foreignObject) { display: none !important; }
+
 /* Hero route overlay */
 .knc-route {
   position: absolute;
