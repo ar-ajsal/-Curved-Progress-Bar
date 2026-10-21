@@ -28,6 +28,8 @@
 
   /* ---------------- 1. Exact text replacements (normalised text -> new text) ---------------- */
   var EXACT = {
+    "All right reserve @2026": "All rights reserved © 2026 KNC Logistics Services",
+    "All right reserve @2025": "All rights reserved © 2026 KNC Logistics Services",
     "We deliver a smarter, faster, and more reliable way to move goods. Combining modern trucking, optimized routing, and real-time visibility across every shipment.":
       "We deliver a smarter, faster, and more reliable way to move global freight. Combining multi-modal transport, optimized routing, and real-time visibility across every shipment.",
     // Home
