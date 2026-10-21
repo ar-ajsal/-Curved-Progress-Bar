@@ -336,6 +336,29 @@
     });
   }
 
+  /* ---------------- 5b. Intro (home, desktop): profile facts fill the empty right column ---------------- */
+  var FACTS = [
+    ["Headquartered in Riyadh", "A Foreign Investment Company (LLC) based in the Kingdom of Saudi Arabia."],
+    ["Established in 2026", "Built around one partner and complete, end-to-end logistics."],
+    ["Aligned with Vision 2030", "Contributing to the Kingdom’s economic diversification through logistics."]
+  ];
+  function addIntroFacts() {
+    qa('[data-framer-name="Section: Intro"] [data-framer-name="Description"]').forEach(function (d) {
+      if (d.nextElementSibling && d.nextElementSibling.classList.contains("knc-facts")) return;
+      var ul = document.createElement("ul");
+      ul.className = "knc-facts";
+      ul.setAttribute("data-knc-facts", "1");
+      FACTS.forEach(function (f, i) {
+        var li = document.createElement("li");
+        li.className = "knc-fact knc-fact-" + (i + 1);
+        var h = document.createElement("strong"); h.textContent = f[0];
+        var p = document.createElement("span"); p.textContent = f[1];
+        li.appendChild(h); li.appendChild(p); ul.appendChild(li);
+      });
+      d.parentNode.insertBefore(ul, d.nextSibling);
+    });
+  }
+
   /* ---------------- 6. Reveal for replaced statements ---------------- */
   var io = null;
   if ("IntersectionObserver" in window) {
@@ -355,6 +378,7 @@
     replaceHeadings();
     replaceBlocks();
     fixLinks();
+    addIntroFacts();
   }
   function schedule() {
     if (queued) return;

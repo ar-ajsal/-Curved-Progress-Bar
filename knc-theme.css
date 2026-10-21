@@ -440,6 +440,50 @@ html.knc-home body [data-framer-name="Section: Hero"] [data-framer-name="Line"] 
 html.knc-contact body header a[href*="contact"],
 html.knc-contact body header [class*="g3klem-container"] { display: none !important; }
 
+/* Home intro (desktop): profile facts in the otherwise empty right column */
+html body ul.knc-facts { display: none; }
+@media (min-width: 810px) {
+  html body ul.knc-facts {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    align-self: stretch;
+  }
+  html body .knc-fact {
+    display: grid;
+    gap: 6px;
+    padding: 22px 0 22px 22px;
+    border-top: 1px solid var(--knc-line);
+    position: relative;
+  }
+  html body .knc-fact:last-child { border-bottom: 1px solid var(--knc-line); }
+  html body .knc-fact::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 24px;
+    bottom: 24px;
+    width: 4px;
+    border-radius: 2px;
+    background: var(--knc-green);
+  }
+  html body .knc-fact-2::before { background: var(--knc-orange); }
+  html body .knc-fact-3::before { background: var(--knc-blue); }
+  html body .knc-fact strong {
+    font-size: clamp(19px, 1.5vw, 24px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--knc-ink);
+  }
+  html body .knc-fact span {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--knc-slate);
+  }
+}
+
 /* Hero route overlay */
 .knc-route {
   position: absolute;
