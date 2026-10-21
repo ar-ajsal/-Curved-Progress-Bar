@@ -298,6 +298,13 @@
     qa('a[data-framer-name="Logo"]').forEach(function (a) {
       if (a.getAttribute("href") !== "/") a.setAttribute("href", "/");
     });
+    // Footer credit to the template author
+    qa("footer *").forEach(function (e) {
+      if (e.children.length === 0 && /Made by\s+(Cyberthic|SANG DO)/i.test(e.textContent || "")) {
+        var box = e.closest('[data-framer-component-type="RichTextContainer"]') || e;
+        box.style.setProperty("display", "none", "important");
+      }
+    });
     // Template links with no KNC page behind them
     qa("nav a, header a, footer a").forEach(function (a) {
       if (/^\s*(Investors?|Careers?|Blog)\s*$/i.test(a.textContent || "")) {
