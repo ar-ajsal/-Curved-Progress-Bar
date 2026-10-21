@@ -74,9 +74,10 @@ These are not in the profile; they are generic marketing language kept for revie
 
 ## 4. Functional issues found while auditing
 
-* **Contact form never sent anything** — it showed "Thank you! Inquiry Received." and cleared the form. It now opens
-  the visitor's email app with the inquiry addressed to `hello@knclogistics.com.sa` and says so. A real delivery
-  backend (e.g. a form service or serverless function) is still recommended.
+* **Contact form never sent anything** — it showed "Thank you! Inquiry Received." and cleared the form. It now submits
+  to **Web3Forms** (`api.web3forms.com`, public form key supplied by the site owner), shows a sending / success / error
+  message, keeps the visitor's text on failure, and keeps the honeypot fields. Delivery goes to the mailbox registered
+  with that Web3Forms key.
 * Mojibake (`â€™`, `â€¢`) in the HTML source, including list bullets on the legal pages — fixed.
 * Template brand name "Himon" still present in the source copy — replaced.
 
@@ -102,9 +103,10 @@ watermark on Contact, dimmed non-active rows in the services list, and section l
 * Social accounts: the footer social column is hidden. Provide KNC's real LinkedIn / X / Instagram / YouTube URLs to restore it.
 
 ### Contact form
-It does **not** submit to a server. Submitting opens the visitor's email app with a pre-filled message to
-`hello@knclogistics.com.sa`, and the page says so. Visitors without a mail client cannot send. Recommended before
-launch: a form service or serverless endpoint.
+Submits to Web3Forms with the owner's access key. **Before launch confirm** that the Web3Forms account for that key
+delivers to `hello@knclogistics.com.sa` (the key, not the page, decides the recipient), and send one real test inquiry
+from the production domain. Web3Forms' free plan has a monthly submission limit and the key is visible in the page
+source by design; if abuse appears, restrict it to the production domain in the Web3Forms dashboard.
 
 ### Needs client approval before launch
 1. Replace or confirm the Container Transport, Last-Mile Delivery and Express Distribution service pages (not in the profile).
