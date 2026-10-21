@@ -167,6 +167,9 @@
 
   /* ---------------- 4. Headings made of per-letter spans ---------------- */
   var HEADINGS = [
+    { start: "Himonredefinesthelogistics", text: "We deliver a smarter, faster, and more reliable way to move global freight. Combining multi-modal transport, optimized routing, and real-time visibility across every shipment." },
+    { start: "KNCredefinesthelogistics", text: "We deliver a smarter, faster, and more reliable way to move global freight. Combining multi-modal transport, optimized routing, and real-time visibility across every shipment." },
+    { start: "KNCLogisticsServicesredefinesthelogistics", text: "We deliver a smarter, faster, and more reliable way to move global freight. Combining multi-modal transport, optimized routing, and real-time visibility across every shipment." },
     { start: "Tracingourpathofrelentlessinnovation", text: "Our direction and purpose" },
     { start: "We’rebackedbyindustryexperts", text: "Experienced professionals." }
   ];
