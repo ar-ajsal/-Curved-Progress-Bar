@@ -1,0 +1,6 @@
+# Not part of the website: raw dump of the original template site, scratch notes and a loader preview.
+# Nothing in the site references these folders (verified), so Vercel does not need to upload them.
+logisticts-1/
+scratch/
+files/
+node_modules/
