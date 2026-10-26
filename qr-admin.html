@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QR generator | KNC digital cards</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/card.css?v=1">
+<style>
+  body { display: block; background: #f4f6fb; padding: 28px 16px 60px; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  h1 { font-size: 26px; letter-spacing: -0.02em; margin: 18px 0 6px; }
+  .sub { color: var(--slate); margin: 0 0 22px; font-size: 15px; line-height: 1.5; max-width: 70ch; }
+  .panel { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 20px; box-shadow: 0 18px 40px -30px rgba(10,18,64,.4); }
+  label { display: block; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--steel); margin-bottom: 8px; }
+  .field { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; }
+  .field > div { flex: 1 1 260px; }
+  input[type=text], select { width: 100%; height: 48px; border: 1px solid var(--line); border-radius: 12px; padding: 0 14px; font: inherit; font-size: 15px; color: var(--ink); background: #fff; }
+  input:focus-visible, select:focus-visible { outline: 3px solid var(--blue); outline-offset: 1px; }
+  .msg { margin: 10px 0 0; font-size: 13.5px; min-height: 20px; }
+  .msg.err { color: #b3261e; font-weight: 600; }
+  .msg.ok { color: #137a4a; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; margin-top: 20px; }
+  .q { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .q h2 { margin: 0; font-size: 18px; letter-spacing: -0.01em; }
+  .q .url { font-size: 13px; color: var(--slate); overflow-wrap: anywhere; margin: 0; }
+  .qr { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 8px; aspect-ratio: 1; display: grid; place-items: center; }
+  .qr svg { width: 100%; height: 100%; display: block; }
+  .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .b { min-height: 44px; border-radius: 12px; border: 1px solid var(--ink); background: var(--ink); color: #fff; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: none; display: grid; place-items: center; }
+  .b.alt { background: #fff; color: var(--ink); border-color: var(--line); }
+  .b:hover { filter: brightness(1.15); }
+  .b.alt:hover { border-color: var(--steel); filter: none; }
+  .miss { margin: 0; padding: 0; list-style: none; font-size: 13.5px; color: var(--slate); }
+  .miss li { padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .miss li:last-child { border: 0; }
+  .miss b { color: var(--ink); }
+  .tools { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .tools .b { padding: 0 18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img src="/knc-logo.png" alt="KNC Logistics Services" width="187" height="46" style="height:46px;width:auto">
+  <h1>Digital card QR generator</h1>
+  <p class="sub">Each QR code contains only the public web address of that person&rsquo;s digital card. Print-ready files use error correction level H, a white background and a 4-module quiet zone. Enter the <b>final production domain</b> before downloading codes for printing.</p>
+
+  <div class="panel">
+    <div class="field">
+      <div>
+        <label for="base">Website address (domain the cards are published on)</label>
+        <input id="base" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://your-domain.com">
+      </div>
+      <div style="flex:0 1 220px">
+        <label for="size">PNG size</label>
+        <select id="size">
+          <option value="1024">1024 px (screen)</option>
+          <option value="2048" selected>2048 px (print)</option>
+          <option value="4096">4096 px (large print)</option>
+        </select>
+      </div>
+    </div>
+    <p class="msg" id="msg" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="tools">
+    <button class="b" id="all-png" type="button">Download all PNG</button>
+    <button class="b alt" id="all-svg" type="button">Download all SVG</button>
+  </div>
+
+  <h2 style="margin:34px 0 10px;font-size:20px;letter-spacing:-.01em">Information still to be provided</h2>
+  <div class="panel"><ul class="miss" id="miss"></ul></div>
+</div>
+
+<script src="/vendor/qrcode.min.js?v=1"></script>
+<script src="/cards-data.js?v=1"></script>
+<script src="/cards-core.js?v=1"></script>
+<script src="/qr-admin.js?v=1"></script>
+</body>
+</html>

@@ -22,7 +22,8 @@ const MIME_TYPES = {
   '.ttf': 'font/ttf',
   '.mp4': 'video/mp4',
   '.webm': 'video/webm',
-  '.ogg': 'video/ogg'
+  '.ogg': 'video/ogg',
+  '.vcf': 'text/vcard; charset=utf-8'
 };
 
 let rewrites = [];
@@ -33,6 +34,20 @@ try {
 
 const server = http.createServer((req, res) => {
   let reqPath = decodeURIComponent(req.url.split('?')[0]);
+
+  // Digital business cards: /afzal.vcf is generated on the fly (same logic as api/vcard.js on Vercel)
+  const vcfMatch = /^\/([a-z0-9-]+)\.vcf$/.exec(reqPath);
+  if (vcfMatch) {
+    const core = require('./cards-core.js');
+    const vcf = core.buildVCard(vcfMatch[1]);
+    if (!vcf) { res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }); return res.end('Not found'); }
+    res.writeHead(200, {
+      'Content-Type': 'text/vcard; charset=utf-8',
+      'Content-Disposition': 'attachment; filename="' + core.resolve(vcfMatch[1]).vcfName + '"',
+      'Cache-Control': 'no-cache'
+    });
+    return res.end(vcf);
+  }
 
   // Check vercel rewrites
   for (const r of rewrites) {
