@@ -22,8 +22,7 @@
     name: "KNC Logistics Services",
     phone: "+966502746895",            // company line, as shown on the website
     email: "hello@knclogistics.com.sa", // company mailbox, as shown on the website
-    // TODO: replace with the final production domain once it is live.
-    website: "https://curved-progress-bar.vercel.app",
+    website: "https://www.knclogistics.com.sa",   // final production domain
     address: {
       street: null,                     // TODO: street / building / P.O. box not provided yet
       city: "Riyadh",

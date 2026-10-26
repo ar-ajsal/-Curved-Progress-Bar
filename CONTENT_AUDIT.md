@@ -96,11 +96,11 @@ about 3 MB. **Accessibility:** axe-core 0 violations; one H1 per page, no skippe
 Items the scripted runs flag but that are intentional: the scrolling marquee, the 15 %-opacity "KNC LOGISTICS"
 watermark on Contact, dimmed non-active rows in the services list, and section labels that reveal on the next scroll step.
 
-### Production-domain changes still needed
-* Add `<link rel="canonical">` and `og:url` on every page once the production domain is final.
-* `og:image` / `twitter:image` currently use `https://curved-progress-bar.vercel.app/og-image.png` — change to the
-  production domain (image file: `og-image.png`, 1200×630).
-* Social accounts: the footer social column is hidden. Provide KNC's real LinkedIn / X / Instagram / YouTube URLs to restore it.
+### Production domain — done
+The production domain is **https://www.knclogistics.com.sa** (the bare domain redirects to `www`). Every page now has a
+`canonical` and `og:url` for that domain, `og:image` / `twitter:image` use `https://www.knclogistics.com.sa/og-image.png`,
+and the digital cards use it as their website. Still to do by hand: submit the sitemap / verify the domain in Google
+Search Console if wanted, and supply KNC's real social-media URLs (the footer social column is hidden until then).
 
 ### Contact form
 Submits to Web3Forms with the owner's access key. **Before launch confirm** that the Web3Forms account for that key
