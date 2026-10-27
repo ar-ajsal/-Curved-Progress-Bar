@@ -215,14 +215,14 @@
   foot.appendChild(el("b", null, r.company));
   foot.appendChild(el("span", null, "Riyadh, Kingdom of Saudi Arabia"));
 
+  // Two columns: identity (left on desktop) and actions/details (right). On phones both are "display: contents",
+  // so the phone layout is unchanged.
+  var colA = el("div", "col-a"), colB = el("div", "col-b");
+  colA.appendChild(hero);
+  colA.appendChild(ident);
+  [saveWrap, actions, sect, list, share, foot].forEach(function (n) { colB.appendChild(n); });
   root.textContent = "";
-  root.appendChild(hero);
-  root.appendChild(ident);
-  root.appendChild(saveWrap);
-  root.appendChild(actions);
-  root.appendChild(sect);
-  root.appendChild(list);
-  root.appendChild(share);
-  root.appendChild(foot);
+  root.appendChild(colA);
+  root.appendChild(colB);
   root.appendChild(toastEl);
 })();
