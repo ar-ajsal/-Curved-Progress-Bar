@@ -39,11 +39,14 @@ const server = http.createServer((req, res) => {
   const vcfMatch = /^\/([a-z0-9-]+)\.vcf$/.exec(reqPath);
   if (vcfMatch) {
     const core = require('./cards-core.js');
-    const vcf = core.buildVCard(vcfMatch[1]);
-    if (!vcf) { res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }); return res.end('Not found'); }
+    const info = core.resolve(vcfMatch[1]);
+    if (!info) { res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' }); return res.end('Not found'); }
+    let photo = null;
+    try { if (info.photoSmall && /^\/card\/[a-z0-9-]+\.jpg$/.test(info.photoSmall)) photo = fs.readFileSync(path.join(BASE_DIR, info.photoSmall)).toString('base64'); } catch (e) {}
+    const vcf = core.buildVCard(vcfMatch[1], { photoBase64: photo });
     res.writeHead(200, {
       'Content-Type': 'text/vcard; charset=utf-8',
-      'Content-Disposition': 'attachment; filename="' + core.resolve(vcfMatch[1]).vcfName + '"',
+      'Content-Disposition': 'inline; filename="' + info.vcfName + '"',
       'Cache-Control': 'no-cache'
     });
     return res.end(vcf);

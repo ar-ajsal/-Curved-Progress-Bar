@@ -76,5 +76,10 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "api/vcard.js": {
+      "includeFiles": "card/*-256.jpg"
+    }
+  }
 }

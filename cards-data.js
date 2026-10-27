@@ -5,11 +5,11 @@
  * It is read by the card pages (card.js), the vCard download (api/vcard.js and
  * the browser fallback) and the QR admin page (qr-admin.html).
  *
- * Anything marked  TODO  has NOT been provided yet. It is left empty (null) on
- * purpose — nothing here is invented. Until a personal value is filled in, the
- * card falls back to the COMPANY value below and says "Company line" next to it.
+ * Phone numbers: international format, digits only after the "+" (no spaces,
+ * no "(0)"), e.g. "+966501234567".
  *
- * Phone numbers: write them in international format, e.g. "+966501234567".
+ * Anything still marked  TODO  has not been provided. It is left empty (null)
+ * on purpose — nothing here is invented.
  */
 (function (root, factory) {
   if (typeof module === "object" && module.exports) module.exports = factory();
@@ -17,58 +17,59 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  // ---- Company-level details (taken from the KNC website / corporate profile) ----
+  // ---- Company-level details ----
   var company = {
     name: "KNC Logistics Services",
-    phone: "+966502746895",            // company line, as shown on the website
-    email: "hello@knclogistics.com.sa", // company mailbox, as shown on the website
-    // TODO: replace with the final production domain once it is live.
-    website: "https://curved-progress-bar.vercel.app",
+    phone: "+966502746895",              // company line (used only if a person has no own number)
+    email: "hello@knclogistics.com.sa",  // company mailbox (used only if a person has no own e-mail)
+    website: "https://www.knclogistics.com.sa",
     address: {
-      street: null,                     // TODO: street / building / P.O. box not provided yet
+      street: "Building No. 7678, Al Shafei Street",
+      extended: "Al Rawabi Dist 5488",
       city: "Riyadh",
-      region: null,                     // TODO: province/region if wanted
-      postalCode: null,                 // TODO: postal code not provided yet
+      region: null,
+      postalCode: "14216",
       country: "Saudi Arabia"
     },
     // Used for the "Location" button (Google Maps search).
-    mapsQuery: "KNC Logistics Services, Riyadh, Kingdom of Saudi Arabia",
-    logo: "/knc-logo.png"               // the existing KNC logo, unchanged
+    mapsQuery: "Building 7678, Al Shafei Street, Al Rawabi, Riyadh 14216, Saudi Arabia",
+    logo: "/knc-logo.png",               // the existing KNC logo, unchanged
+    logoLight: "/knc-logo-footer.png"    // same logo with white lettering, for the navy header
   };
 
   // ---- People ---------------------------------------------------------------------
-  // Route = "/" + key  (e.g. /afzal).  Photo files live in /card/.
+  // Route = "/" + key  (e.g. /afzal).  Photos live in /card/.
   var members = {
     afzal: {
       key: "afzal",
       name: { prefix: "Dr.", given: "Afzal", family: "Aziz" },
-      // Taken from the "Our Teams" block on the About page — TODO: confirm the title printed on the card.
-      designation: "Global Logistics & Freight Forwarding Executive",
+      designation: "Managing Partner",
       photo: "/card/afzal.jpg",
-      phone: null,       // TODO: personal mobile number not provided
-      whatsapp: null,    // TODO: WhatsApp number (defaults to the phone number)
-      email: null        // TODO: personal e-mail not provided
+      photoSmall: "/card/afzal-256.jpg",   // embedded in the saved contact
+      phone: "+966566103539",
+      whatsapp: null,                      // defaults to the phone number
+      email: "afzal.aziz@knclogistics.com.sa"
     },
     nisar: {
       key: "nisar",
       name: { prefix: "", given: "Nisar", family: "Kondadan" },
-      // Taken from the "Our Teams" block on the About page — TODO: confirm the title printed on the card.
-      // (That block spells the surname "Kondandan"; this card uses "Kondadan" as in the card brief — confirm.)
-      designation: "Operations / Sales & Marketing Leader",
+      designation: "Managing Partner",
       photo: "/card/nisar.jpg",
-      phone: null,       // TODO: personal mobile number not provided
-      whatsapp: null,    // TODO
-      email: null        // TODO
+      photoSmall: "/card/nisar-256.jpg",
+      phone: "+966502746894",
+      whatsapp: null,
+      email: "nisar.kondadan@knclogistics.com.sa"
     },
     arun: {
       key: "arun",
+      // TODO: the details sent read "Arun Nelli C" — confirm whether the "C" belongs on the card.
       name: { prefix: "", given: "Arun", family: "Nelli" },
-      // Taken from the "Our Teams" block on the About page — TODO: confirm the title printed on the card.
-      designation: "Supply Chain & Inventory Management Specialist",
+      designation: "Managing Partner",
       photo: "/card/arun.jpg",
-      phone: null,       // TODO: personal mobile number not provided
-      whatsapp: null,    // TODO
-      email: null        // TODO
+      photoSmall: "/card/arun-256.jpg",
+      phone: "+966535847425",
+      whatsapp: null,
+      email: "arun.nelli@knclogistics.com.sa"
     }
   };
 

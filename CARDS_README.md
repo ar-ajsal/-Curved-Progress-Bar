@@ -11,20 +11,16 @@ Three public, login-free cards opened by scanning a QR code on the physical card
 QR generator (not linked from anywhere, `noindex`): **`/qr-admin`**.
 
 ## Change what a card shows
-Edit **`cards-data.js`** only. Everything marked `TODO` there has not been provided and is left empty:
+Edit **`cards-data.js`** only. Real details supplied by KNC are in; the remaining open points are marked `TODO`:
 
-* personal phone, WhatsApp number and e-mail for each person (until filled in, the card shows the company
-  line / company e-mail and labels them "Company line" / "Company"; the saved contact also carries only
-  the company numbers),
-* street address and postal code (only "Riyadh, Saudi Arabia" is known),
-* the **production website address** (`company.website`, currently the Vercel address),
-* a title for each person: the ones in the file were taken from the "Our Teams" block on the About page —
-  confirm them for the printed card. The About block spells the surname "Kondandan"; the cards use "Kondadan".
+* Arun: the details sent read "Arun Nelli C" — confirm whether the "C" belongs on the card (currently left out).
+* WhatsApp uses each person's mobile number unless a separate `whatsapp` number is added.
+* The company phone/e-mail are used only if a person has none of their own.
 
-Photos are in `/card/*.jpg` (cropped from `team_*.png`). Replace a file or change `photo` in the data.
+Photos are in `/card/*.jpg` (cropped from `team_*.png`); `/card/*-256.jpg` is the small copy embedded in the saved contact.
 
 If you change a **name or title**, also update the `<title>` / description in `afzal.html`, `nisar.html`,
-`arun.html` (only used for link previews; the card itself is drawn from the data).
+`arun.html` (used for link previews; the card itself is drawn from the data).
 
 ## Print the QR codes
 1. Deploy, then open `https://<production-domain>/qr-admin`.
