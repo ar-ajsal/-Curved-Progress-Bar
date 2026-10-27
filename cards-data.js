@@ -65,7 +65,7 @@
       // TODO: the details sent read "Arun Nelli C" — confirm whether the "C" belongs on the card.
       name: { prefix: "", given: "Arun", family: "Nelli" },
       designation: "Managing Partner",
-      photo: "/card/arun.jpg",
+      photo: "/card/arun.jpg?v=2",
       photoSmall: "/card/arun-256.jpg",
       phone: "+966535847425",
       whatsapp: null,
