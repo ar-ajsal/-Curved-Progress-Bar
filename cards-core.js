@@ -44,7 +44,15 @@
     return ((n.given || "").charAt(0) + (n.family || "").charAt(0)).toUpperCase();
   }
   function addressText(a) {
-    return [a.street, a.city, a.region, a.postalCode, a.country].filter(Boolean).join(", ");
+    return [a.street, a.extended, a.city + (a.postalCode ? " " + a.postalCode : ""), a.region, a.country === "Saudi Arabia" ? "Kingdom of Saudi Arabia" : a.country].filter(Boolean).join(", ");
+  }
+  function addressLines(a) {
+    return [
+      a.street,
+      a.extended,
+      [a.city, a.postalCode].filter(Boolean).join(" "),
+      a.country === "Saudi Arabia" ? "Kingdom of Saudi Arabia" : a.country
+    ].filter(Boolean);
   }
   function fileName(m) {
     return (fullName(m.name).replace(/^Dr\.?\s+/i, "").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "") || m.key) + ".vcf";
@@ -85,7 +93,9 @@
       email: email, emailFromCompany: !ownEmail,
       whatsapp: wa ? wa.replace(/^\+/, "") : null,
       website: site, websiteDisplay: site ? site.replace(/^https?:\/\//, "") : null,
-      address: company.address, addressText: addressText(company.address),
+      address: company.address, addressText: addressText(company.address), addressLines: addressLines(company.address),
+      photoSmall: m.photoSmall || null,
+      logoLight: company.logoLight || company.logo,
       mapsUrl: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(company.mapsQuery || addressText(company.address)),
       logo: company.logo,
       vcfName: fileName(m),
@@ -110,11 +120,11 @@
     out.push(cur);
     return out.join("\r\n");
   }
-  function buildVCard(key) {
+  function buildVCard(key, opts) {
     var r = resolve(key);
     if (!r) return null;
+    opts = opts || {};
     var n = r.member.name, a = r.address;
-    var coPhone = cleanPhone(company.phone), coEmail = cleanEmail(company.email);
     var ownPhone = cleanPhone(r.member.phone), ownEmail = cleanEmail(r.member.email);
     var L = [];
     L.push("BEGIN:VCARD");
@@ -124,12 +134,14 @@
     L.push("FN:" + esc(r.fullName));
     L.push("ORG:" + esc(r.company));
     if (r.designation) L.push("TITLE:" + esc(r.designation));
+    // The person's own number / e-mail. Company ones are used only when a person has none.
     if (ownPhone) L.push("TEL;TYPE=CELL,VOICE:" + ownPhone);
-    if (coPhone && coPhone !== ownPhone) L.push("TEL;TYPE=WORK,VOICE:" + coPhone);
+    else if (r.phone) L.push("TEL;TYPE=WORK,VOICE:" + r.phone);
     if (ownEmail) L.push("EMAIL;TYPE=INTERNET,WORK:" + ownEmail);
-    if (coEmail && coEmail !== ownEmail) L.push("EMAIL;TYPE=INTERNET,WORK:" + coEmail);
+    else if (r.email) L.push("EMAIL;TYPE=INTERNET,WORK:" + r.email);
     if (r.website) L.push("URL:" + r.website);
-    L.push("ADR;TYPE=WORK:" + ["", "", esc(a.street), esc(a.city), esc(a.region), esc(a.postalCode), esc(a.country)].join(";"));
+    L.push("ADR;TYPE=WORK:" + ["", esc(a.extended), esc(a.street), esc(a.city), esc(a.region), esc(a.postalCode), esc(a.country)].join(";"));
+    if (opts.photoBase64) L.push("PHOTO;ENCODING=b;TYPE=JPEG:" + opts.photoBase64);
     L.push("END:VCARD");
     return L.map(fold).join("\r\n") + "\r\n";
   }
