@@ -97,6 +97,26 @@
   saveWrap.appendChild(el("p", "save-note", "Opens in your phone’s Contacts app"));
   rise(saveWrap);
 
+  /* Android: open the Contacts app's "new contact" screen, prefilled (Chrome intent). Falls back to the .vcf file. */
+  if (/Android/i.test(navigator.userAgent)) {
+    var fileUrl = location.origin + "/" + r.key + ".vcf";
+    var parts = [
+      "action=android.intent.action.INSERT",
+      "type=vnd.android.cursor.dir/contact",
+      "S.name=" + encodeURIComponent(r.fullName),
+      r.member.phone ? "S.phone=" + encodeURIComponent(r.phone) : "",
+      r.member.email ? "S.email=" + encodeURIComponent(r.email) : "",
+      "S.company=" + encodeURIComponent(r.company),
+      r.designation ? "S.job_title=" + encodeURIComponent(r.designation) : "",
+      "S.postal=" + encodeURIComponent(r.addressText),
+      "S.browser_fallback_url=" + encodeURIComponent(fileUrl)
+    ].filter(Boolean);
+    save.addEventListener("click", function (e) {
+      e.preventDefault();
+      location.href = "intent:#Intent;" + parts.join(";") + ";end";
+    });
+  }
+
   var vc = core.buildVCard(r.key);
   if (window.fetch && vc) {
     fetch(save.href, { method: "HEAD" }).then(function (res) {
